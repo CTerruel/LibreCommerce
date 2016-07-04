@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="titulo">Nova Venda</ui:define>
+
+    <ui:define name="conteudo">
+        <br/>
+        <h:form>
+            <p:messages autoUpdate="true" />
+            <p:panel>
+                <h:panelGrid columns="5">
+                    <p:outputLabel value="Quantidade: " />
+                    <p:inputText value="#{novaVendaBean.itemVenda.quantidadeProduto}" size="8" />
+                    <p:outputLabel value="Código de Barras: " />
+                    <p:inputText value="#{novaVendaBean.produto.codigoBarra}" 
+                                 required="true" requiredMessage="O código de barra é obrigatório!"/>
+                    <p:commandButton value="Adicionar" action="#{novaVendaBean.adicionar()}" update="@form"/>
+                </h:panelGrid>
+                <br/>
+                <p:dataTable paginator="true" rowsPerPageTemplate="0, 10, 0"
+                             value="#{novaVendaBean.venda.itensVenda}" var="itemVenda"
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                             {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             paginatorPosition="bottom">
+                    <p:column headerText="Item" style="text-align: right" >
+                        <h:outputText  style="text-align: right" value="#{itemVenda.numeroItem}" />
+                    </p:column>
+                    <p:column headerText="Produto" width="550" >
+                        <h:outputText value="#{itemVenda.produto.nome}" />
+                    </p:column>
+                    <p:column headerText="Quantidade" style="text-align: right" >
+                        <h:outputText style="text-align: right" value="#{itemVenda.quantidadeProduto}" />
+                    </p:column>
+                    <p:column headerText="Total R$" style="text-align: right" >
+                        <h:outputText style="text-align: right" 
+                                      value="#{itemVenda.valorTotal}"/>
+                    </p:column>
+                    <p:column headerText="Opções">
+                        <p:commandLink value="Remover" style="color: blue" 
+                                       action="#{novaVendaBean.removerItem(itemVenda)}" update="@form" />
+                    </p:column>
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column colspan="4" style="text-align: right; font-size: xx-large" 
+                                      footerText="SubTotal R$: "/>
+                            <p:column footerText="#{novaVendaBean.venda.totalVenda}" style="font-size: xx-large"/>
+                        </p:row>
+                    </p:columnGroup>
+                </p:dataTable>
+                <br/>
+                <p:menubar>
+                    <f:facet name="options">
+                        <p:commandButton value="Salvar Venda" action="#{novaVendaBean.prepararSalvarVenda()}" />
+                        <p:commandButton value="Cancelar Venda" action="index" />
+                    </f:facet>
+                </p:menubar>
+            </p:panel>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

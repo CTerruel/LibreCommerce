@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+
+    template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">Gerenciar Caixa</ui:define>
+
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages autoUpdate="true" />
+            <h:panelGrid columns="2" cellpadding="10" style="width:62pc">
+                <p:column>
+                    <p:panel>
+                        <p:commandLink actionListener="#{caixaBean.prepararAbrirCaixa()}" >
+                            <h:graphicImage library="images" name="abrir-caixa.png"/>
+                            <h:outputText value="Abrir Caixa"/>
+                        </p:commandLink>
+                    </p:panel>
+                </p:column>
+                <p:column>
+                    <p:panel>
+                        <p:commandLink actionListener="#{caixaBean.prepararFecharCaixa()}" >
+                            <h:graphicImage library="images" name="fechar-caixa.png"/>
+                            <h:outputText value="Fechar Caixa"/>
+                        </p:commandLink>
+                    </p:panel>
+                </p:column>
+                <p:column>
+                    <p:panel>
+                        <p:commandLink>
+                            <h:graphicImage library="images" name="bloquear-caixa.png"/>
+                            <h:outputText value="Bloquear Caixa"/>
+                        </p:commandLink>
+                    </p:panel>
+                </p:column>
+                <p:column>
+                    <p:panel>
+                        <p:commandLink action="#{caixaBean.novaVenda()}">
+                            <h:graphicImage library="images" name="nova-venda.png"/>
+                            <h:outputText value="Nova Venda"/>
+                        </p:commandLink>
+                    </p:panel>
+                </p:column>
+                <p:column>
+                    <p:panel>
+                        <p:commandLink>
+                            <h:graphicImage library="images" name="trocar-operador.png"/>
+                            <h:outputText value="Trocar Operador"/>
+                        </p:commandLink>
+                    </p:panel>
+                </p:column>
+                <p:column>
+                    <p:panel>
+                        <p:commandLink>
+                            <h:graphicImage library="images" name="realizar-sangria.png"/>
+                            <h:outputText value="Realizar Sangria"/>
+                        </p:commandLink>
+                    </p:panel>
+                </p:column>
+            </h:panelGrid>
+            <p:dialog header="Abrir Caixa" widgetVar="modalAbrirCaixa" minHeight="400" 
+                      modal="true" resizable="false" minWidth="400">
+                <h:panelGrid columns="1" cellpadding="4">
+                    <h:outputLabel value="Informe o valor para abertura do caixa:" />
+                    <p:inputText value="#{caixaBean.caixa.valorAbertura}" />
+                    <p:column>
+                        <p:commandButton value="Abrir Caixa" actionListener="#{caixaBean.abrirCaixa()}"
+                                         onclick="PF('modalAbrirCaixa').hide();" />
+                        <p:commandButton value="Cancelar Operação" 
+                                         onclick="PF('modalAbrirCaixa').hide();" />
+                    </p:column>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog header="Aviso" widgetVar="modalValidacaoCaixaAberto" 
+                      minHeight="400" modal="true" resizable="false" minWidth="400">
+                <h:panelGrid columns="1" cellpadding="4">
+                    <p:column>
+                        <h:outputLabel value="Caixa já está aberto."/>
+                    </p:column>
+                    <p:column>
+                        <p:commandButton value="OK" onclick="PF('modalValidacaoCaixaAberto').hide();" />
+                    </p:column>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog header="Aviso" widgetVar="modalCaixaAbertoOK" minHeight="400" 
+                      modal="true" resizable="false" minWidth="400">
+                <h:panelGrid columns="1" cellpadding="4">
+                    <p:column>
+                        <h:outputText value="Caixa aberto com sucesso!."/>
+                    </p:column>
+                    <p:column>
+                        <p:commandButton value="OK" onclick="PF('modalCaixaAbertoOK').hide();" />
+                    </p:column>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog header="Fechar Caixa" widgetVar="modalFecharCaixa" minHeight="400" 
+                      modal="true" resizable="false" minWidth="400">
+                <h:panelGrid columns="1" cellpadding="4">
+                    <h:outputLabel value="Informe o valor para fechamento do caixa:"/>
+                    <p:inputText value="#{caixaBean.caixa.valorFechamento}" />
+                    <p:column>
+                        <p:commandButton value="Fechar Caixa" actionListener="#{caixaBean.fecharCaixa()}" 
+                                         onclick="PF('modalFecharCaixa').hide();" />
+                        <p:commandButton value="Cancelar Operação" onclick="PF('modalFecharCaixa').hide();" />
+                    </p:column>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog header="Aviso" widgetVar="modalValidacaoCaixaFechado" 
+                      minHeight="400" modal="true" resizable="false" minWidth="400">
+                <h:panelGrid columns="1" cellpadding="4">
+                    <p:column>
+                        <h:outputText value="Caixa já está fechado."/>
+                    </p:column>
+                    <p:column>
+                        <p:commandButton value="OK" onclick="PF('modalValidacaoCaixaFechado').hide();" />
+                    </p:column>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog header="Aviso" widgetVar="modalCaixaEncerradoOK" minHeight="400" 
+                      modal="true" resizable="false" minWidth="400">
+                <h:panelGrid columns="1" cellpadding="4">
+                    <p:column>
+                        <h:outputText value="Caixa encerrado com sucesso!."/>
+                    </p:column>
+                    <p:column>
+                        <p:commandButton value="OK" onclick="PF('modalCaixaEncerradoOK').hide();" />
+                    </p:column>
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

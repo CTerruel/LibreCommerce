@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="titulo">Cadastro de Funcionários</ui:define>
+
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages autoUpdate="true" />
+            <br/>
+            <p:panel>
+                <p:menubar>
+                    <f:facet name="options">
+                        <p:commandButton value="Salvar" action="#{funcionarioBean.salvar()}" update="@form" />
+                        <p:commandButton value="Atualizar" action="#{funcionarioBean.atualizar()}" update="@form"/>
+                    </f:facet>
+                </p:menubar>
+                <br/>
+                <h:outputText value="Os campos marcados com * são obrigatórios!"
+                              style="color: red"/>
+                <p:panelGrid columns="2" id="cadFuncionario">
+                    <p:column>
+                        <p:inputText placeholder="Nome:" style="width: 400px"
+                                       value="#{funcionarioBean.funcionario.nome}"
+                                       required="true" requiredMessage="Campo Nome Obrigatório!"/> *
+                    </p:column>
+                    <p:inputText placeholder="Endereço:" style="width: 400px"
+                                 value="#{funcionarioBean.funcionario.endereco}"/>
+                    <p:calendar placeholder="Data Nascimento:" navigator="true"
+                                locale="pt_BR"
+                                value="#{funcionarioBean.funcionario.dataNascimento}" />
+                    <p:column>
+                        <p:selectBooleanCheckbox value="#{funcionarioBean.funcionario.admin}" />
+                        <h:outputText value=" Administrador?"/>
+                    </p:column>
+
+                    <p:column>
+                        <p:selectOneMenu value="#{funcionarioBean.estado}" required="true"
+                                           requiredMessage="Campo Estado Obrigatório!">
+                            <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
+                            <f:selectItems value="#{funcionarioBean.estados}" var="estado"
+                                           itemValue="#{estado}" itemLabel="#{estado.nome}"/>
+                            <f:ajax render="combo-cidade" event="change"
+                                    listener="#{funcionarioBean.getCidadesDoEstado(event)}"/>
+                        </p:selectOneMenu> *
+                    </p:column>
+
+                    <p:column>
+                        <p:selectOneMenu id="combo-cidade" value="#{funcionarioBean.funcionario.cidade}"
+                                         required="true" requiredMessage="Campo Cidade Obrigatório!">
+                            <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
+                            <f:selectItems value="#{funcionarioBean.cidades}" var="cidade"
+                                           itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>
+                        </p:selectOneMenu> *
+                    </p:column>
+                    
+                    <p:inputText placeholder="Login:" style="width: 400px"
+                                 value="#{funcionarioBean.funcionario.login}"/>
+                    <p:password placeholder="Senha:" style="width: 400px"
+                                 value="#{funcionarioBean.funcionario.senha}"
+                                 feedback="true" weakLabel="senha fraca"
+                                 goodLabel="senha boa" strongLabel="senha ótima"/>
+                </p:panelGrid>
+            </p:panel>
+            <p:dialog widgetVar="modalFuncionarioSalvoOK" modal="true" resizable="false">
+                <h:panelGrid columns="1">
+                    <h:outputText value="Funcionario Salvo com sucesso!"/>
+                    <p:commandButton value="Ok" onclick="PF('modalFuncionarioSalvoOK').hide()" />
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+
+</ui:composition>
+
