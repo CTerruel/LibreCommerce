@@ -46,7 +46,7 @@
                 </h:panelGrid>
             </p:panel>
             <p:dialog header="Pesquisar Cliente" widgetVar="modalPesquisarCliente"
-                modal="true" resizable="false" minHeight="400" minWidth="400" >
+                      modal="true" resizable="false" minHeight="400" minWidth="400" >
                 <h:panelGrid columns="2">
                     <p:inputText size="30" placeholder="Nome do Cliente" value="#{novaVendaBean.buscaNomeCliente}" />
                     <p:commandButton value="Buscar" action="#{novaVendaBean.buscatClientesPorNome()}"
@@ -63,7 +63,7 @@
                                        update="@form"/>
                     </p:column>
                 </p:dataTable>
-                
+
             </p:dialog>
         </h:form>
     </ui:define>
