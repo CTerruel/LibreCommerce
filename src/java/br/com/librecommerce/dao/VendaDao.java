@@ -30,7 +30,7 @@ public class VendaDao {
             System.out.println(e.getMessage());
             return false;
         } finally {
-            if (em.isOpen()) em.close();
+            em.close();
         }
     }
 
