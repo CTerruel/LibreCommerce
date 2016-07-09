@@ -13,7 +13,8 @@
     <ui:define name="conteudo">
         <br/>
         <h:form>
-            <p:panel>
+            <p:focus context="pnl" />
+            <p:panel id="pnl">
                 <p:menubar>
                     <f:facet name="options">
                         <p:commandButton value="Novo" action="#{funcionarioBean.novo()}" />

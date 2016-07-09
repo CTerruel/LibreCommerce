@@ -14,7 +14,8 @@
         <br/>
         <h:form>
             <p:messages autoUpdate="true" />
-            <p:panel>
+            <p:focus context="panel" />
+            <p:panel id="panel">
                 <h:panelGrid columns="5">
                     <p:outputLabel value="Quantidade: " />
                     <p:inputText value="#{novaVendaBean.itemVenda.quantidadeProduto}" size="8" />

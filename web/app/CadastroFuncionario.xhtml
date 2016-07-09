@@ -14,11 +14,9 @@
         <h:form>
             <p:messages autoUpdate="true" />
             <br/>
-            <p:panel>
+            <p:focus context="pnl" />
+            <p:panel id="pnl">
                 <p:toolbar>
-                    <f:facet name="left">
-                        <p:commandButton value="Lista de Funcionários" action="ListaFuncionarios" />
-                    </f:facet>
                     <f:facet name="right">
                         <p:commandButton value="Salvar" action="#{funcionarioBean.salvar()}" update="@form" />
                         <p:commandButton value="Atualizar" action="#{funcionarioBean.atualizar()}" update="@form"/>
