@@ -44,8 +44,7 @@
                     </p:column>
 
                     <p:column>
-                        <p:selectOneMenu value="#{funcionarioBean.estado}" required="true"
-                                           requiredMessage="Campo Estado Obrigatório!">
+                        <p:selectOneMenu value="#{funcionarioBean.estado}" >
                             <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
                             <f:selectItems value="#{funcionarioBean.estados}" var="estado"
                                            itemValue="#{estado}" itemLabel="#{estado.nome}"/>
@@ -55,8 +54,7 @@
                     </p:column>
 
                     <p:column>
-                        <p:selectOneMenu id="combo-cidade" value="#{funcionarioBean.funcionario.cidade}"
-                                         required="true" requiredMessage="Campo Cidade Obrigatório!">
+                        <p:selectOneMenu id="combo-cidade" value="#{funcionarioBean.funcionario.cidade}" >
                             <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
                             <f:selectItems value="#{funcionarioBean.cidades}" var="cidade"
                                            itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>
