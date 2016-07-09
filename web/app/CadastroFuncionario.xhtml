@@ -36,7 +36,7 @@
                     <p:inputText placeholder="Endereço:" style="width: 400px"
                                  value="#{funcionarioBean.funcionario.endereco}"/>
                     <p:calendar placeholder="Data Nascimento:" navigator="true"
-                                locale="pt_BR"
+                                locale="pt_BR" yearRange="c-100:c+10"
                                 value="#{funcionarioBean.funcionario.dataNascimento}" />
                     <p:column>
                         <p:selectBooleanCheckbox value="#{funcionarioBean.funcionario.admin}" />

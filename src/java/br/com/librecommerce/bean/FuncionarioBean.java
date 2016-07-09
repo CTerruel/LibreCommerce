@@ -28,11 +28,9 @@ public class FuncionarioBean {
     private Funcionario funcionario;
     private Estado estado;
     private Cidade cidade;
-    private String buscaNome = "";
     private List<Estado> estados;
     private List<Cidade> cidades;
-    private List<Funcionario> funcionarios;
-
+    
     /**
      * Creates a new instance of FuncionarioBean
      */
@@ -41,7 +39,6 @@ public class FuncionarioBean {
         estado = new Estado();
         cidade = new Cidade();
         estados = new EstadoDao().buscarTodos();
-        funcionarios = new FuncionarioDao().listarTodos();
     }
     
     public void getCidadesDoEstado(AjaxBehaviorEvent event) {
@@ -58,7 +55,6 @@ public class FuncionarioBean {
     public void salvar() {
         FuncionarioDao funcDao = new FuncionarioDao();
         funcDao.salvar(funcionario);
-        funcionarios = funcDao.listarTodos();
         funcionario = new Funcionario();
         FacesUtil.showInfoMessage("Funcionário salvo com sucesso!", null);
     }
@@ -72,10 +68,6 @@ public class FuncionarioBean {
     public String editar(Funcionario funcionario) {
         this.funcionario = funcionario;
         return "CadastroFuncionario?faces-redirect=true";
-    }
-    
-    public void pesquisar() {
-        funcionarios = new FuncionarioDao().buscarFuncionarioPorNome(buscaNome);
     }
     
     public Funcionario getFuncionario() {
@@ -102,14 +94,6 @@ public class FuncionarioBean {
         this.cidade = cidade;
     }
 
-    public String getBuscaNome() {
-        return buscaNome;
-    }
-
-    public void setBuscaNome(String buscaNome) {
-        this.buscaNome = buscaNome;
-    }
-    
     public List<Estado> getEstados() {
         return estados;
     }
@@ -124,14 +108,6 @@ public class FuncionarioBean {
 
     public void setCidades(List<Cidade> cidades) {
         this.cidades = cidades;
-    }
-
-    public List<Funcionario> getFuncionarios() {
-        return funcionarios;
-    }
-
-    public void setFuncionarios(List<Funcionario> funcionarios) {
-        this.funcionarios = funcionarios;
     }
 
 }
