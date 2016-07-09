@@ -7,7 +7,7 @@ package br.com.librecommerce.bean;
 
 import br.com.librecommerce.dao.FuncionarioDao;
 import br.com.librecommerce.modelo.Funcionario;
-import javax.faces.application.FacesMessage;
+import br.com.librecommerce.util.FacesUtil;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -33,8 +33,7 @@ public class AutenticacaoBean {
     public String login() {
         
         if (funcionario.getLogin().isEmpty() || funcionario.getSenha().isEmpty()) {
-            FacesContext.getCurrentInstance().addMessage(null, 
-                    new FacesMessage("Os campos estão vazios!"));
+            FacesUtil.showAlertMessage("Os campos estão vazios!", null);
             return "/seguranca/login";
         }
         
@@ -47,8 +46,7 @@ public class AutenticacaoBean {
         }
         else {
             funcionario = new Funcionario();
-            FacesContext.getCurrentInstance().addMessage(null, 
-                    new FacesMessage("Usuário não encontrado!"));
+            FacesUtil.showAlertMessage("Usuário não encontrado!", null);
             return "/seguranca/login";
         }
         

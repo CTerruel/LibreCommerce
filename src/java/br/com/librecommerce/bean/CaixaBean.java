@@ -9,8 +9,8 @@ import br.com.librecommerce.dao.CaixaDao;
 import br.com.librecommerce.modelo.Caixa;
 import br.com.librecommerce.modelo.Funcionario;
 import br.com.librecommerce.modelo.StatusCaixa;
+import br.com.librecommerce.util.FacesUtil;
 import java.util.Date;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -43,7 +43,7 @@ public class CaixaBean {
         if (this.caixa.getStatusCaixa() == null || this.caixa.getStatusCaixa() == StatusCaixa.FECHADO) {
             RequestContext.getCurrentInstance().execute("PF('modalAbrirCaixa').show();");
         } else {
-            showMessage("O caixa ja esta aberto!");
+            FacesUtil.showAlertMessage("O caixa ja esta aberto!", null);
         }
         return "GerenciarCaixa";
 
@@ -56,7 +56,7 @@ public class CaixaBean {
         caixa.setStatusCaixa(StatusCaixa.ABERTO);
         caixa = new CaixaDao().abrirCaixa(caixa);
         adicionaCaixaNaSessao(caixa);
-        showMessage("Caixa aberto e pronto para operar!");
+        FacesUtil.showInfoMessage("Caixa aberto e pronto para vendas!", null);
         return "GerenciarCaixa";
     }
 
@@ -66,8 +66,7 @@ public class CaixaBean {
 
     public String prepararFecharCaixa() {
         if (this.caixa.getStatusCaixa() == null || this.caixa.getStatusCaixa() == StatusCaixa.FECHADO) {
-            //RequestContext.getCurrentInstance().execute("PF('modalValidacaoCaixaFechado').show();");
-            showMessage("O caixa ja esta fechado!");
+            FacesUtil.showAlertMessage("O caixa ja esta fechado!", null);
         } else {
             RequestContext.getCurrentInstance().execute("PF('modalFecharCaixa').show();");
         }
@@ -79,25 +78,19 @@ public class CaixaBean {
         caixa.setStatusCaixa(StatusCaixa.FECHADO);
         new CaixaDao().fecharCaixa(caixa);
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("caixa");
-        //RequestContext.getCurrentInstance().execute("PF('modalCaixaEncerradoOK').show();");
-        showMessage("Caixa fechado com sucesso!");
+        FacesUtil.showInfoMessage("Caixa fechado com sucesso!", null);
         return "GerenciarCaixa";
 
     }
 
     public String novaVenda() {
         if (caixa.getStatusCaixa() == null || caixa.getStatusCaixa() == StatusCaixa.FECHADO) {
-            showMessage("É preciso abrir o caixa antes de efetuar vendas!");
+            FacesUtil.showAlertMessage("É preciso abrir o caixa antes de efetuar vendas!", null);
             return "GerenciarCaixa";
         }
         else {
             return "NovaVenda?faces-redirect=true";
         }
-    }
-
-    public void showMessage(String mensagem) {
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(mensagem));
     }
 
     public Caixa getCaixa() {

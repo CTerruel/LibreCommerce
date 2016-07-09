@@ -11,11 +11,10 @@ import br.com.librecommerce.dao.FuncionarioDao;
 import br.com.librecommerce.modelo.Cidade;
 import br.com.librecommerce.modelo.Estado;
 import br.com.librecommerce.modelo.Funcionario;
+import br.com.librecommerce.util.FacesUtil;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 
 /**
@@ -61,13 +60,13 @@ public class FuncionarioBean {
         funcDao.salvar(funcionario);
         funcionarios = funcDao.listarTodos();
         funcionario = new Funcionario();
-        showMessage("Funcionário salvo com sucesso!");
+        FacesUtil.showInfoMessage("Funcionário salvo com sucesso!", null);
     }
     
     public void atualizar() {
         new FuncionarioDao().atualizar(funcionario);
         funcionario = new Funcionario();
-        showMessage("Funcionário atualizado!");
+        FacesUtil.showInfoMessage("Funcionário atualizado!", null);
     }
     
     public String editar(Funcionario funcionario) {
@@ -77,10 +76,6 @@ public class FuncionarioBean {
     
     public void pesquisar() {
         funcionarios = new FuncionarioDao().buscarFuncionarioPorNome(buscaNome);
-    }
-    
-    private void showMessage(String mensagem) {
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(mensagem));
     }
     
     public Funcionario getFuncionario() {

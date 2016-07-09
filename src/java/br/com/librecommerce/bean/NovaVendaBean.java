@@ -14,10 +14,10 @@ import br.com.librecommerce.modelo.FormaPagamento;
 import br.com.librecommerce.modelo.ItemVenda;
 import br.com.librecommerce.modelo.Produto;
 import br.com.librecommerce.modelo.Venda;
+import br.com.librecommerce.util.FacesUtil;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -55,7 +55,7 @@ public class NovaVendaBean {
     public String adicionar() {
         produto = new ProdutoDao().buscarProdutoPorCodigoB(produto.getCodigoBarra());
         if (produto == null) {
-            showMessage("Produto não encontrado");
+            FacesUtil.showAlertMessage("Produto não encontrado", null);
             return "NovaVenda";
         }
         produto.setEstoque(produto.getEstoque() - itemVenda.getQuantidadeProduto());
@@ -76,7 +76,7 @@ public class NovaVendaBean {
 
     public String prepararSalvarVenda() {
         if (venda.getItensVenda().isEmpty()) {
-            showMessage("Nenhum item vendido!");
+            FacesUtil.showAlertMessage("Nenhum item vendido!", null);
             return "NovaVenda";
         }
         return "ConfirmarVenda";
@@ -111,11 +111,6 @@ public class NovaVendaBean {
         venda.setCliente(cliente);
     }
     
-    private void showMessage(String mensagem) {
-        FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(mensagem));
-    }
-
     public Cliente getCliente() {
         return cliente;
     }
