@@ -15,12 +15,15 @@
             <p:messages autoUpdate="true" />
             <br/>
             <p:panel>
-                <p:menubar>
-                    <f:facet name="options">
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton value="Lista de Funcionários" action="ListaFuncionarios" />
+                    </f:facet>
+                    <f:facet name="right">
                         <p:commandButton value="Salvar" action="#{funcionarioBean.salvar()}" update="@form" />
                         <p:commandButton value="Atualizar" action="#{funcionarioBean.atualizar()}" update="@form"/>
                     </f:facet>
-                </p:menubar>
+                </p:toolbar>
                 <br/>
                 <h:outputText value="Os campos marcados com * são obrigatórios!"
                               style="color: red"/>
@@ -73,6 +76,12 @@
                     <h:outputText value="Funcionario Salvo com sucesso!"/>
                     <p:commandButton value="Ok" onclick="PF('modalFuncionarioSalvoOK').hide()" />
                 </h:panelGrid>
+            </p:dialog>
+            <p:ajaxStatus onstart="PF('statusDialog').show();"
+                          onsuccess="PF('statusDialog').hide();"/>
+            <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
+                      showHeader="false" closable="false" draggable="false">
+                <p:graphicImage library="images" name="carregando.gif" />
             </p:dialog>
         </h:form>
     </ui:define>
