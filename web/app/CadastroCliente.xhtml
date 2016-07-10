@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="titulo">Cadastro de Clientes</ui:define>
+
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages autoUpdate="true" />
+            <br/>
+            <p:focus context="pnl" />
+            <p:panel id="pnl">
+                <p:toolbar>
+                    <f:facet name="right">
+                        <p:commandButton value="Salvar" update="@form" action="#{clienteBean.salvar()}" />
+                        <p:commandButton value="Atualizar" update="@form" action="#{clienteBean.atualizar()}"/>
+                    </f:facet>
+                </p:toolbar>
+                <br/>
+                <h:outputText value="Os campos marcados com * são obrigatórios!"
+                              style="color: red"/>
+                <p:panelGrid columns="2" id="cadFuncionario">
+                    <p:column>
+                        <p:inputText placeholder="Nome:" style="width: 400px"
+                                     value="#{clienteBean.cliente.nome}"
+                                     required="true" requiredMessage="Campo Nome Obrigatório!"/> *
+                    </p:column>
+                    <p:inputText placeholder="Endereço:" style="width: 400px"
+                                 value="#{clienteBean.cliente.endereco}"/>
+                    <p:calendar placeholder="Data Nascimento:" navigator="true"
+                                value="#{clienteBean.cliente.dataNascimento}"
+                                locale="pt_BR" yearRange="c-100:c+10" />
+                    <p:inputText placeholder="CPF/CNPJ" value="#{clienteBean.cliente.cpfCnpj}" />
+                    <p:column>
+                        <p:selectOneMenu value="#{clienteBean.estado}"  >
+                            <f:selectItem itemLabel="Estado" noSelectionOption="true"/>
+                            <f:selectItems value="#{clienteBean.estados}" var="estado"
+                                           itemLabel="#{estado.nome}" itemValue="#{estado}"/>
+                            <f:ajax render="combo-cidade" event="change"
+                                    listener="#{clienteBean.buscaCidadesDoEstado()}"/>
+                        </p:selectOneMenu> *
+                    </p:column>
+
+                    <p:column>
+                        <p:selectOneMenu id="combo-cidade" value="#{clienteBean.cliente.cidade}" >
+                            <f:selectItem itemLabel="Cidade" noSelectionOption="true"/>
+                            <f:selectItems value="#{clienteBean.cidades}" var="cidade"
+                                           itemLabel="#{cidade.nome}" itemValue="#{cidade}"/>
+                        </p:selectOneMenu> *
+                    </p:column>
+                </p:panelGrid>
+            </p:panel>
+            <p:ajaxStatus onstart="PF('statusDialog').show();"
+                          onsuccess="PF('statusDialog').hide();"/>
+            <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
+                      showHeader="false" closable="false" draggable="false">
+                <p:graphicImage library="images" name="carregando.gif" />
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

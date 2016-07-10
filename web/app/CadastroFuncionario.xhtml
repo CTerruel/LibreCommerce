@@ -67,12 +67,6 @@
                                  goodLabel="senha boa" strongLabel="senha ótima"/>
                 </p:panelGrid>
             </p:panel>
-            <p:dialog widgetVar="modalFuncionarioSalvoOK" modal="true" resizable="false">
-                <h:panelGrid columns="1">
-                    <h:outputText value="Funcionario Salvo com sucesso!"/>
-                    <p:commandButton value="Ok" onclick="PF('modalFuncionarioSalvoOK').hide()" />
-                </h:panelGrid>
-            </p:dialog>
             <p:ajaxStatus onstart="PF('statusDialog').show();"
                           onsuccess="PF('statusDialog').hide();"/>
             <p:dialog widgetVar="statusDialog" modal="true" resizable="false"

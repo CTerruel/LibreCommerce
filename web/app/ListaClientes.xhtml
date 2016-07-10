@@ -7,7 +7,7 @@
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://xmlns.jcp.org/jsf/core">
-
+    
     <ui:define name="titulo">Lista Funcionários</ui:define>
 
     <ui:define name="conteudo">
@@ -17,38 +17,37 @@
             <p:panel id="pnl">
                 <p:toolbar>
                     <f:facet name="right">
-                        <p:commandButton value="Novo" action="#{funcionarioBean.novo()}" />
+                        <p:commandButton value="Novo" action="CadastroCliente" />
                     </f:facet>
                 </p:toolbar>
                 <br/>
                 <h:panelGrid columns="2">
-                    <p:inputText placeholder="Nome do Funcionário" size="40" 
-                                 value="#{listaFuncionarioBean.buscaNome}" />
-                    <p:commandButton value="Pesquisar Funcionário" 
-                                     action="#{listaFuncionarioBean.pesquisar()}"
+                    <p:inputText placeholder="Nome do Cliente" size="40" 
+                                 value="#{listaClienteBean.buscaCliente}" />
+                    <p:commandButton value="Pesquisar Cliente" action="#{listaClienteBean.pesquisar()}"
                                      update="@form"/>
                 </h:panelGrid>
                 <br/>
-                <p:dataTable value="#{listaFuncionarioBean.funcionarios}" var="funcionario"
+                <p:dataTable value="#{listaClienteBean.clientes}" var="cliente"
                              paginator="true" rowsPerPageTemplate="10" paginatorPosition="bottom"
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
                              {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
                     <p:column headerText="Nome">
-                        <h:outputText value="#{funcionario.nome}"/>
+                        <h:outputText value="#{cliente.nome}" />
                     </p:column>
                     <p:column headerText="Endereço">
-                        <h:outputText value="#{funcionario.endereco}"/>
+                        <h:outputText value="#{cliente.endereco}" />
                     </p:column>
                     <p:column headerText="Data de Nascimento" width="200">
-                        <h:outputText value="#{funcionario.dataNascimento}">
+                        <h:outputText value="#{cliente.dataNascimento}" >
                             <f:convertDateTime pattern="dd/MM/yyyy"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="É administrador?" width="200">
-                        <h:outputText value="#{funcionario.admin ? 'Sim'  : 'Não'}"/>
+                    <p:column headerText="CPF/CNPJ" width="200">
+                        <h:outputText value="#{cliente.cpfCnpj}" />
                     </p:column>
                     <p:column headerText="Opções">
-                        <p:commandLink value="Editar" action="#{funcionarioBean.editar(funcionario)}" />
+                        <p:commandLink value="Editar" action="#{clienteBean.editar(cliente)}" />
                     </p:column>
                 </p:dataTable>
             </p:panel>
@@ -60,6 +59,5 @@
             </p:dialog>
         </h:form>
     </ui:define>
-
+    
 </ui:composition>
-
