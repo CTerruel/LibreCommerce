@@ -9,14 +9,14 @@ import br.com.librecommerce.dao.FuncionarioDao;
 import br.com.librecommerce.modelo.Funcionario;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
 
 /**
  *
  * @author Clovis
  */
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class ListaFuncionarioBean {
 
     private String buscaNome;

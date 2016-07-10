@@ -15,38 +15,8 @@ import javax.persistence.NoResultException;
  *
  * @author Clovis
  */
-public class ClienteDao {
-
-    public void salvar(Cliente cliente) {
-        EntityManager em = EntityManagerUtil.getInstance();
-        try {
-            em.getTransaction().begin();
-            em.persist(cliente);
-            em.getTransaction().commit();
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            em.close();
-        }
-    }
-
-    public void atualizar(Cliente cliente) {
-        EntityManager em = EntityManagerUtil.getInstance();
-        try {
-            em.getTransaction().begin();
-            em.merge(cliente);
-            em.getTransaction().commit();
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            em.close();
-        }
-    }
-        
+public class ClienteDao extends GenericDao<Cliente> {
+      
     public List<Cliente> buscarClientesPorNome(String nome) {
         EntityManager em = EntityManagerUtil.getInstance();
         List<Cliente> clientes = null;

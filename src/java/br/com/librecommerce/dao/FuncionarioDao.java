@@ -15,7 +15,7 @@ import javax.persistence.NoResultException;
  *
  * @author Clovis
  */
-public class FuncionarioDao {
+public class FuncionarioDao extends GenericDao<Funcionario> {
 
     public Funcionario login(Funcionario f) {
 
@@ -34,33 +34,6 @@ public class FuncionarioDao {
             return null;
         }
 
-    }
-
-    public void salvar(Funcionario f) {
-        EntityManager em = EntityManagerUtil.getInstance();
-        try {
-            em.getTransaction().begin();
-            em.persist(f);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            em.close();
-        }
-
-    }
-
-    public void atualizar(Funcionario funcionario) {
-        EntityManager em = EntityManagerUtil.getInstance();
-        try {
-            em.getTransaction().begin();
-            em.merge(funcionario);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        } finally {
-            em.close();
-        }
     }
 
     public List<Funcionario> buscarFuncionarioPorNome(String nome) {
