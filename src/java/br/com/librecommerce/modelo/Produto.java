@@ -36,6 +36,7 @@ public class Produto implements Serializable, EntidadeBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Override
     public int getId() {
         return id;
     }

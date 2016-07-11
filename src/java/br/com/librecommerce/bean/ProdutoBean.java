@@ -36,7 +36,7 @@ public class ProdutoBean {
     }
     
     public String novo() {
-        this.produto = new Produto();
+        produto = new Produto();
         return "CadastroProduto?faces-redirect=true";
     }
     

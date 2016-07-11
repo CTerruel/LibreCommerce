@@ -29,8 +29,10 @@ public class ListaFuncionarioBean {
         this.buscaNome = "";
     }
 
-    public void pesquisar() {
+    public String pesquisar() {
         this.funcionarios = new FuncionarioDao().buscarFuncionarioPorNome(buscaNome);
+        buscaNome = "";
+        return "ListaFuncionario";
     }
     
     public String getBuscaNome() {

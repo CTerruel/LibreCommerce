@@ -4,8 +4,62 @@
     template="/WEB-INF/template/layout.xhtml"
     xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://xmlns.jcp.org/jsf/html"
-    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
-    
-    
-    
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="titulo">Lista de Fornecedores</ui:define>
+
+    <ui:define name="conteudo">
+        <br/>
+        <h:form>
+            <p:focus context="pnl" />
+            <p:panel id="pnl">
+                <p:toolbar>
+                    <f:facet name="right">
+                        <p:commandButton value="Novo" action="#{fornecedorBean.novo()}"/>
+                    </f:facet>
+                </p:toolbar>
+                <br/>
+                <h:panelGrid columns="2">
+                    <p:inputText size="40" placeholder="Nome do Fornecedor"
+                                 value="#{listaFornecedorBean.buscaFornecedor}"/>
+                    <p:commandButton value="Pesquisar Fornecedor"
+                                     action="#{listaFornecedorBean.pesquisar()}"
+                                     update="@form"/>
+                </h:panelGrid>
+                <br/>
+                <p:dataTable value="#{listaFornecedorBean.fornecedores}" var="fornecedor"
+                    paginator="true" rowsPerPageTemplate="10" paginatorPosition="bottom"
+                    paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} 
+                    {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" >
+                    <p:column headerText="Fornecedor">
+                        <h:outputText value="#{fornecedor.nome}" />
+                    </p:column>
+                    <p:column headerText="Endereço">
+                        <h:outputText value="#{fornecedor.endereco}" />
+                    </p:column>
+                    <p:column headerText="Cidade">
+                        <h:outputText value="#{fornecedor.cidade.nome}" />
+                    </p:column>
+                    <p:column headerText="CNPJ" style="width: 200px">
+                        <h:outputText value="#{fornecedor.cnpj}" />
+                    </p:column>
+                    <p:column headerText="Insc. Estadual" style="width: 200px">
+                        <h:outputText value="#{fornecedor.inscEstadual}" />
+                    </p:column>
+                    <p:column headerText="Opções">
+                        <p:commandLink value="Editar" action="#{fornecedorBean.editar(fornecedor)}" />
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+            <p:ajaxStatus onstart="PF('statusDialog').show();"
+                          onsuccess="PF('statusDialog').hide();"/>
+            <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
+                      showHeader="false" closable="false" draggable="false">
+                <p:graphicImage library="images" name="carregando.gif" />
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
 </ui:composition>

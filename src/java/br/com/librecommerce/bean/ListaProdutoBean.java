@@ -32,6 +32,7 @@ public class ListaProdutoBean {
 
     public String pesquisar() {
         this.produtos = new ProdutoDao().buscaProdutoPorNome(buscaProduto);
+        buscaProduto = "";
         return "ListaProdutos";
     }
 

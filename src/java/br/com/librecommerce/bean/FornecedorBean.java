@@ -6,15 +6,16 @@
 package br.com.librecommerce.bean;
 
 import br.com.librecommerce.dao.CidadeDao;
-import br.com.librecommerce.dao.ClienteDao;
 import br.com.librecommerce.dao.EstadoDao;
+import br.com.librecommerce.dao.FornecedorDao;
 import br.com.librecommerce.modelo.Cidade;
-import br.com.librecommerce.modelo.Cliente;
 import br.com.librecommerce.modelo.Estado;
+import br.com.librecommerce.modelo.Fornecedor;
 import br.com.librecommerce.util.FacesUtil;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.event.AjaxBehaviorEvent;
 
 /**
  *
@@ -22,54 +23,51 @@ import javax.faces.bean.SessionScoped;
  */
 @ManagedBean
 @SessionScoped
-public class ClienteBean {
-    
-    private Cliente cliente;
+public class FornecedorBean {
+
+    private Fornecedor fornecedor;
     private Estado estado;
     private List<Estado> estados;
     private List<Cidade> cidades;
 
     /**
-     * Creates a new instance of ClienteBean
+     * Creates a new instance of CadastroFornecedorBean
      */
-    public ClienteBean() {
-        cliente = new Cliente();
-        estado = new Estado();
+    public FornecedorBean() {
+        fornecedor = new Fornecedor();
         estados = new EstadoDao().buscarTodos();
     }
     
-    public void buscaCidadesDoEstado() {
+    public String novo() {
+        fornecedor = new Fornecedor();
+        return "CadastroFornecedor?faces-redirect=true";
+    }
+    
+    public void getCidadesDoEstado(AjaxBehaviorEvent event) {
         cidades = new CidadeDao().buscarTodasDoEstado(estado);
     }
     
-    public String novo() {
-        cliente = new Cliente();
-        return "CadastroCliente?faces-redirect=true";
-    }
-    
     public void salvar() {
-        new ClienteDao().salvar(cliente);
-        cliente = new Cliente();
-        FacesUtil.showInfoMessage("Cliente salvo com sucesso!", null);
+        new FornecedorDao().salvar(fornecedor);
+        FacesUtil.showInfoMessage("Fornecedor salvo com sucesso!", null);
     }
     
     public void atualizar() {
-        new ClienteDao().atualizar(cliente);
-        cliente = new Cliente();
-        FacesUtil.showInfoMessage("Cliente atualizado!", null);
+        new FornecedorDao().atualizar(fornecedor);
+        FacesUtil.showInfoMessage("Fornecedor atualizado", null);
     }
     
-    public String editar(Cliente cliente) {
-        this.cliente = cliente;
-        return "CadastroCliente";
-    }
-    
-    public Cliente getCliente() {
-        return cliente;
+    public String editar(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
+        return "CadastroFornecedor?faces-redirect=true";
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public Fornecedor getFornecedor() {
+        return fornecedor;
+    }
+
+    public void setFornecedor(Fornecedor fornecedor) {
+        this.fornecedor = fornecedor;
     }
 
     public Estado getEstado() {
@@ -95,6 +93,6 @@ public class ClienteBean {
     public void setCidades(List<Cidade> cidades) {
         this.cidades = cidades;
     }
-    
+
     
 }

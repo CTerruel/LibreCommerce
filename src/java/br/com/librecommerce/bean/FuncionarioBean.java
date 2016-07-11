@@ -27,7 +27,6 @@ public class FuncionarioBean {
     
     private Funcionario funcionario;
     private Estado estado;
-    private Cidade cidade;
     private List<Estado> estados;
     private List<Cidade> cidades;
     
@@ -37,7 +36,6 @@ public class FuncionarioBean {
     public FuncionarioBean() {
         funcionario = new Funcionario();
         estado = new Estado();
-        cidade = new Cidade();
         estados = new EstadoDao().buscarTodos();
     }
     
@@ -81,14 +79,6 @@ public class FuncionarioBean {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
-    }
-
-    public Cidade getCidade() {
-        return cidade;
-    }
-
-    public void setCidade(Cidade cidade) {
-        this.cidade = cidade;
     }
 
     public List<Estado> getEstados() {

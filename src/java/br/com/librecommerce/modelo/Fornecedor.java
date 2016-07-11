@@ -6,13 +6,38 @@
 package br.com.librecommerce.modelo;
 
 import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 /**
  *
  * @author Clovis
  */
-public class Fornecedor extends Pessoa implements Serializable {
+
+@Entity
+public class Fornecedor extends Pessoa implements Serializable, EntidadeBase {
     
     private static final long serialVersionUID = 1L;
+    
+    private String cnpj;
+    private String inscEstadual;
+
+    @Column(length = 18)
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    @Column(length = 15)
+    public String getInscEstadual() {
+        return inscEstadual;
+    }
+
+    public void setInscEstadual(String inscEstadual) {
+        this.inscEstadual = inscEstadual;
+    }
     
 }

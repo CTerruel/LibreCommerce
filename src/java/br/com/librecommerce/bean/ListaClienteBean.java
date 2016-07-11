@@ -26,12 +26,13 @@ public class ListaClienteBean {
      * Creates a new instance of ListaClienteBean
      */
     public ListaClienteBean() {
-        this.buscaCliente = "";
         this.clientes = new ClienteDao().listarTodos();
     }
 
-    public void pesquisar() {
+    public String pesquisar() {
         this.clientes = new ClienteDao().buscarClientesPorNome(buscaCliente);
+        buscaCliente = "";
+        return "ListaClientes";
     }
     
     public String getBuscaCliente() {
