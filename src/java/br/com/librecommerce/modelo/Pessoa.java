@@ -19,7 +19,7 @@ import javax.persistence.OneToOne;
  */
 
 @MappedSuperclass
-public class Pessoa implements Serializable {
+public class Pessoa implements Serializable, EntidadeBase {
     
     private static final long serialVersionUID = 1L;
     

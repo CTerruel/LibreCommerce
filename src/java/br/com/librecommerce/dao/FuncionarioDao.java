@@ -18,9 +18,8 @@ import javax.persistence.NoResultException;
 public class FuncionarioDao extends GenericDao<Funcionario> {
 
     public Funcionario login(Funcionario f) {
-
+        EntityManager em = EntityManagerUtil.getInstance();
         try {
-            EntityManager em = EntityManagerUtil.getInstance();
             f = (Funcionario) em.createQuery("SELECT f FROM Funcionario f WHERE f.login = :login AND f.senha = :senha")
                     .setParameter("login", f.getLogin())
                     .setParameter("senha", f.getSenha())

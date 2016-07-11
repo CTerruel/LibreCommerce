@@ -18,7 +18,7 @@ import javax.persistence.Id;
  */
 
 @Entity
-public class Categoria implements Serializable {
+public class Categoria implements Serializable, EntidadeBase {
     
     private static final long serialVersionUID = 1L;
     

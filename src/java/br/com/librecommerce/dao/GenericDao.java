@@ -5,6 +5,7 @@
  */
 package br.com.librecommerce.dao;
 
+import br.com.librecommerce.modelo.EntidadeBase;
 import br.com.librecommerce.util.EntityManagerUtil;
 import javax.persistence.EntityManager;
 
@@ -12,7 +13,7 @@ import javax.persistence.EntityManager;
  *
  * @author Clovis
  */
-public class GenericDao<T> {
+public class GenericDao<T extends EntidadeBase> {
     
     public void salvar(T t) {
         EntityManager em = EntityManagerUtil.getInstance();
@@ -42,6 +43,21 @@ public class GenericDao<T> {
         finally {
             em.close();
         }
+    }
+    
+    public T buscarPorId(Class<T> clazz, int id) {
+        EntityManager em = EntityManagerUtil.getInstance();
+        T t = null;
+        try {
+            t = em.find(clazz, id);
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            em.close();
+        }
+        return t;
     }
     
 }

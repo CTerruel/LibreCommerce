@@ -18,7 +18,7 @@ import javax.persistence.Id;
  */
 
 @Entity
-public class Estado implements Serializable {
+public class Estado implements Serializable, EntidadeBase {
     
     private static final long serialVersionUID = 1L;
     

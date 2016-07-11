@@ -53,7 +53,7 @@ public class NovaVendaBean {
     }
     
     public String adicionar() {
-        produto = new ProdutoDao().buscarProdutoPorCodigoB(produto.getCodigoBarra());
+        produto = new ProdutoDao().buscarProdutoPorCodigoBarra(produto.getCodigoBarra());
         if (produto == null) {
             FacesUtil.showAlertMessage("Produto não encontrado", null);
             return "NovaVenda";

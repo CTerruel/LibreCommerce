@@ -23,7 +23,7 @@ public class CidadeConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String string) {
         if (string != null && !string.isEmpty()) {
-            return new CidadeDao().buscarCidadePorId(Integer.valueOf(string));
+            return new CidadeDao().buscarPorId(Cidade.class, Integer.valueOf(string));
         }
         
         return null;

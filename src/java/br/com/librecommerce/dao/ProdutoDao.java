@@ -7,6 +7,7 @@ package br.com.librecommerce.dao;
 
 import br.com.librecommerce.modelo.Produto;
 import br.com.librecommerce.util.EntityManagerUtil;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
@@ -14,9 +15,9 @@ import javax.persistence.NoResultException;
  *
  * @author Clovis
  */
-public class ProdutoDao {
+public class ProdutoDao extends GenericDao<Produto> {
 
-    public Produto buscarProdutoPorCodigoB(int codigoBarra) {
+    public Produto buscarProdutoPorCodigoBarra(int codigoBarra) {
         EntityManager em = EntityManagerUtil.getInstance();
         Produto p = null;
         try {
@@ -31,6 +32,40 @@ public class ProdutoDao {
 
         }
         return p;
+    }
+    
+    public List<Produto> buscaProdutoPorNome(String nome) {
+        EntityManager em = EntityManagerUtil.getInstance();
+        List<Produto> produtos = null;
+        try {
+            produtos = em.createQuery("SELECT p FROM Produto p WHERE p.nome LIKE :nome")
+                    .setParameter("nome", "%" + nome + "%")
+                    .getResultList();
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+            return produtos;
+        }
+        finally {
+            em.close();
+        }
+        return produtos;
+    }
+    
+    public List<Produto> listarTodos() {
+        EntityManager em = EntityManagerUtil.getInstance();
+        List<Produto> produtos = null;
+        try {
+            produtos = em.createQuery("FROM Produto p").getResultList();
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+            return produtos;
+        }
+        finally {
+            em.close();
+        }
+        return produtos;
     }
 
     protected void atualizarEstoque(Produto p, EntityManager em) {

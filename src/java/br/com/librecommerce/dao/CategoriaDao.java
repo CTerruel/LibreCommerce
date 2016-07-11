@@ -5,9 +5,8 @@
  */
 package br.com.librecommerce.dao;
 
-import br.com.librecommerce.modelo.Estado;
+import br.com.librecommerce.modelo.Categoria;
 import br.com.librecommerce.util.EntityManagerUtil;
-import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -15,22 +14,22 @@ import javax.persistence.EntityManager;
  *
  * @author Clovis
  */
-public class EstadoDao extends GenericDao<Estado> {
+public class CategoriaDao extends GenericDao<Categoria> {
     
-    public List<Estado> buscarTodos() {
+    public List<Categoria> listarTodos() {
         EntityManager em = EntityManagerUtil.getInstance();
-        List<Estado> estados = null;
+        List<Categoria> categorias = null;
         try {
-            estados = em.createQuery("FROM Estado e").getResultList();
-        }
+            categorias = em.createQuery("FROM Categoria c").getResultList();
+        } 
         catch (Exception e) {
             e.printStackTrace();
-            return estados;
+            return categorias;
         }
         finally {
             em.close();
         }
-        return estados;
+        return categorias;
     }
-    
+
 }

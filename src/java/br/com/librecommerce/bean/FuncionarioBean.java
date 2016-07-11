@@ -46,15 +46,12 @@ public class FuncionarioBean {
     }
     
     public String novo() {
-        if (funcionario != null) {
-            funcionario = new Funcionario();
-        }
+        funcionario = new Funcionario();
         return "CadastroFuncionario?faces-redirect=true";
     }
     
     public void salvar() {
-        FuncionarioDao funcDao = new FuncionarioDao();
-        funcDao.salvar(funcionario);
+        new FuncionarioDao().salvar(funcionario);
         funcionario = new Funcionario();
         FacesUtil.showInfoMessage("Funcionário salvo com sucesso!", null);
     }

@@ -20,7 +20,7 @@ import javax.persistence.ManyToOne;
  */
 
 @Entity
-public class Cidade implements Serializable {
+public class Cidade implements Serializable, EntidadeBase {
     
     private static final long serialVersionUID = 1L;
     

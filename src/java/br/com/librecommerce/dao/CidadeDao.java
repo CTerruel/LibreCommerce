@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
  *
  * @author Clovis
  */
-public class CidadeDao {
+public class CidadeDao extends GenericDao<Cidade> {
     
     public List<Cidade> buscarTodasDoEstado(Estado estado) {
         EntityManager em = EntityManagerUtil.getInstance();
@@ -32,24 +32,6 @@ public class CidadeDao {
             em.close();
         }
         return cidades;
-    }
-    
-    public Cidade buscarCidadePorId(int id) {
-        EntityManager em = EntityManagerUtil.getInstance();
-        Cidade c = null;
-        try {
-            em.getTransaction().begin();
-            c = em.find(Cidade.class, id);
-            em.getTransaction().commit();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return c;
-        }
-        finally {
-            em.close();
-        }
-        return c;
     }
     
 }
