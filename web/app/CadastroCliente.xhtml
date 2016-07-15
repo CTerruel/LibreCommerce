@@ -17,6 +17,10 @@
             <p:focus context="pnl" />
             <p:panel id="pnl">
                 <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton value="Consultar Cliente" type="button"
+                                         onclick="PF('pesquisaCliente').show();"/>
+                    </f:facet>
                     <f:facet name="right">
                         <p:commandButton value="Salvar" update="@form" action="#{clienteBean.salvar()}" />
                         <p:commandButton value="Atualizar" update="@form" action="#{clienteBean.atualizar()}"/>
@@ -61,6 +65,27 @@
             <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
                       showHeader="false" closable="false" draggable="false">
                 <p:graphicImage library="images" name="carregando.gif" />
+            </p:dialog>
+        </h:form>
+        <h:form id="frmPesquisa">
+            <p:dialog widgetVar="pesquisaCliente" modal="true" resizable="false"
+                      width="900" height="400">
+                <h:panelGrid columns="2">
+                    <p:inputText placeholder="Cliente" size="35" value="#{clienteBean.cliente.nome}" />
+                    <p:commandButton value="pesquisar" action="#{clienteBean.buscaClientesPorNome()}"
+                                     update="dtClientes"/>
+                </h:panelGrid>
+                <p:dataTable id="dtClientes" value="#{clienteBean.clientes}" var="cliente">
+                    <p:column headerText="Cliente">
+                        <h:outputText value="#{cliente.nome}" />
+                    </p:column>
+                    <p:column headerText="Endereço">
+                        <h:outputText value="#{cliente.endereco}" />
+                    </p:column>
+                    <p:column headerText="Opções">
+                        <p:commandLink value="Editar" action="#{clienteBean.editar(cliente)}" />
+                    </p:column>
+                </p:dataTable>
             </p:dialog>
         </h:form>
     </ui:define>

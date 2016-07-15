@@ -27,6 +27,7 @@ public class FuncionarioBean {
     
     private Funcionario funcionario;
     private Estado estado;
+    private List<Funcionario> funcionarios;
     private List<Estado> estados;
     private List<Cidade> cidades;
     
@@ -36,6 +37,7 @@ public class FuncionarioBean {
     public FuncionarioBean() {
         funcionario = new Funcionario();
         estado = new Estado();
+        funcionarios = new FuncionarioDao().listarTodos();
         estados = new EstadoDao().buscarTodos();
     }
     
@@ -43,9 +45,8 @@ public class FuncionarioBean {
         cidades = new CidadeDao().buscarTodasDoEstado(estado);
     }
     
-    public String novo() {
-        funcionario = new Funcionario();
-        return "CadastroFuncionario?faces-redirect=true";
+    public void buscaFuncionarioPorNome() {
+        funcionarios = new FuncionarioDao().buscarFuncionarioPorNome(funcionario.getNome());
     }
     
     public void salvar() {
@@ -79,6 +80,14 @@ public class FuncionarioBean {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public List<Funcionario> getFuncionarios() {
+        return funcionarios;
+    }
+
+    public void setFuncionarios(List<Funcionario> funcionarios) {
+        this.funcionarios = funcionarios;
     }
 
     public List<Estado> getEstados() {

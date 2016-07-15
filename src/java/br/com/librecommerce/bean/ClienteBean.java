@@ -26,6 +26,7 @@ public class ClienteBean {
     
     private Cliente cliente;
     private Estado estado;
+    private List<Cliente> clientes;
     private List<Estado> estados;
     private List<Cidade> cidades;
 
@@ -35,6 +36,7 @@ public class ClienteBean {
     public ClienteBean() {
         cliente = new Cliente();
         estado = new Estado();
+        clientes = new ClienteDao().listarTodos();
         estados = new EstadoDao().buscarTodos();
     }
     
@@ -42,9 +44,8 @@ public class ClienteBean {
         cidades = new CidadeDao().buscarTodasDoEstado(estado);
     }
     
-    public String novo() {
-        cliente = new Cliente();
-        return "CadastroCliente?faces-redirect=true";
+    public void buscaClientesPorNome() {
+        clientes = new ClienteDao().buscarClientesPorNome(cliente.getNome());
     }
     
     public void salvar() {
@@ -61,7 +62,7 @@ public class ClienteBean {
     
     public String editar(Cliente cliente) {
         this.cliente = cliente;
-        return "CadastroCliente";
+        return "CadastroCliente?faces-redirect=true";
     }
     
     public Cliente getCliente() {
@@ -78,6 +79,14 @@ public class ClienteBean {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public List<Cliente> getClientes() {
+        return clientes;
+    }
+
+    public void setClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
     }
 
     public List<Estado> getEstados() {

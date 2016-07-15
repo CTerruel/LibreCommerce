@@ -35,9 +35,9 @@ public class ProdutoBean {
         categorias = new CategoriaDao().listarTodos();
     }
     
-    public String novo() {
-        produto = new Produto();
-        return "CadastroProduto?faces-redirect=true";
+    public void buscaProdutoPorNome() {
+        produtos = new ProdutoDao().buscaProdutoPorNome(produto.getNome());
+        System.out.println("nome " + produto.getNome());
     }
     
     public void salvar() {

@@ -18,7 +18,7 @@
                 <h:panelGrid columns="3">
                     <h:outputLabel value="Cliente: "/>
                     <h:outputText value="#{novaVendaBean.nomeCliente}" />
-                    <p:commandButton value="Buscar" onclick="PF('modalPesquisarCliente').show();" />
+                    <p:commandButton value="Buscar" type="button" onclick="PF('modalPesquisarCliente').show();" />
                     <h:outputLabel value="Forma de pagamento: " />
                     <p:selectOneMenu value="#{novaVendaBean.venda.formaPagamento}"
                                      required="true" requiredMessage="Escolha a forma de Pagamento!">
@@ -45,6 +45,14 @@
                     <p:commandButton value="Confirmar" action="#{novaVendaBean.salvar()}" />
                 </h:panelGrid>
             </p:panel>
+            <p:ajaxStatus onstart="PF('statusDialog').show();"
+                          onsuccess="PF('statusDialog').hide();"/>
+            <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
+                      showHeader="false" closable="false" draggable="false">
+                <p:graphicImage library="images" name="carregando.gif" />
+            </p:dialog>
+        </h:form>
+        <h:form id="frmPesquisa">
             <p:dialog header="Pesquisar Cliente" widgetVar="modalPesquisarCliente"
                       modal="true" resizable="false" minHeight="400" minWidth="400" >
                 <h:panelGrid columns="2">
@@ -63,12 +71,6 @@
                                        update="@form"/>
                     </p:column>
                 </p:dataTable>
-            </p:dialog>
-            <p:ajaxStatus onstart="PF('statusDialog').show();"
-                          onsuccess="PF('statusDialog').hide();"/>
-            <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
-                      showHeader="false" closable="false" draggable="false">
-                <p:graphicImage library="images" name="carregando.gif" />
             </p:dialog>
         </h:form>
     </ui:define>

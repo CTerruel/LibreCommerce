@@ -17,6 +17,10 @@
             <p:focus context="pnl" />
             <p:panel id="pnl">
                 <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton type="button" value="Consultar Fornecedor"
+                                         onclick="PF('pesquisaFornecedor').show();" />
+                    </f:facet>
                     <f:facet name="right">
                         <p:commandButton value="Salvar" action="#{fornecedorBean.salvar()}" update="@form" />
                         <p:commandButton value="Atualizar" action="#{fornecedorBean.atualizar()}" update="@form" />
@@ -49,6 +53,28 @@
             <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
                       showHeader="false" closable="false" draggable="false">
                 <p:graphicImage library="images" name="carregando.gif" />
+            </p:dialog>
+        </h:form>
+        <h:form id="frmPesquisa">
+            <p:dialog widgetVar="pesquisaFornecedor" modal="true" resizable="false"
+                      width="900" height="400">
+                <h:panelGrid columns="2">
+                    <p:inputText placeholder="Fornecedor" size="35" value="#{fornecedorBean.fornecedor.nome}" />
+                    <p:commandButton value="Pesquisar" action="#{fornecedorBean.buscaFornecedorPorNome()}"
+                                     update="dtFornecedores"/>
+                </h:panelGrid>
+                <p:dataTable id="dtFornecedores" value="#{fornecedorBean.fornecedores}"
+                             var="fornecedor">
+                    <p:column headerText="Fornecedor">
+                        <h:outputText value="#{fornecedor.nome}" />
+                    </p:column>
+                    <p:column headerText="Endereço">
+                        <h:outputText value="#{fornecedor.endereco}" />
+                    </p:column>
+                    <p:column headerText="Opções">
+                        <p:commandLink value="Editar" action="#{fornecedorBean.editar(fornecedor)}" />
+                    </p:column>
+                </p:dataTable>
             </p:dialog>
         </h:form>
     </ui:define>

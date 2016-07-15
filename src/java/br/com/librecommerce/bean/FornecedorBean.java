@@ -27,6 +27,7 @@ public class FornecedorBean {
 
     private Fornecedor fornecedor;
     private Estado estado;
+    private List<Fornecedor> fornecedores;
     private List<Estado> estados;
     private List<Cidade> cidades;
 
@@ -36,15 +37,15 @@ public class FornecedorBean {
     public FornecedorBean() {
         fornecedor = new Fornecedor();
         estados = new EstadoDao().buscarTodos();
-    }
-    
-    public String novo() {
-        fornecedor = new Fornecedor();
-        return "CadastroFornecedor?faces-redirect=true";
+        fornecedores = new FornecedorDao().listarTodos();
     }
     
     public void getCidadesDoEstado(AjaxBehaviorEvent event) {
         cidades = new CidadeDao().buscarTodasDoEstado(estado);
+    }
+    
+    public void buscaFornecedorPorNome() {
+        fornecedores = new FornecedorDao().buscarFornecedoresPorNome(fornecedor.getNome());
     }
     
     public void salvar() {
@@ -76,6 +77,14 @@ public class FornecedorBean {
 
     public void setEstado(Estado estado) {
         this.estado = estado;
+    }
+
+    public List<Fornecedor> getFornecedores() {
+        return fornecedores;
+    }
+
+    public void setFornecedores(List<Fornecedor> fornecedores) {
+        this.fornecedores = fornecedores;
     }
 
     public List<Estado> getEstados() {

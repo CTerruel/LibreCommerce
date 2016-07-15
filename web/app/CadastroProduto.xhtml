@@ -17,6 +17,10 @@
             <p:focus context="pnl" />
             <p:panel id="pnl">
                 <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton type="button" value="Consultar Produto" 
+                                         onclick="PF('pesquisaProduto').show();" />
+                    </f:facet>
                     <f:facet name="right">
                         <p:commandButton value="Salvar" action="#{produtoBean.salvar()}" />
                         <p:commandButton value="Atualizar" action="#{produtoBean.atualizar()}" />
@@ -44,6 +48,31 @@
             <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
                       showHeader="false" closable="false" draggable="false">
                 <p:graphicImage library="images" name="carregando.gif" />
+            </p:dialog>
+        </h:form>
+        <h:form id="frmPesquisa">
+            <p:dialog widgetVar="pesquisaProduto" modal="true" resizable="false" width="900"
+                      height="400" header="Pesquisar Produto">
+
+                <h:panelGrid columns="2">
+                    <p:inputText placeholder="Produto" size="35" value="#{produtoBean.produto.nome}" />
+                    <p:commandButton value="Pesquisar" action="#{produtoBean.buscaProdutoPorNome()}" 
+                                     update="dtProdutos"/>
+                </h:panelGrid>
+                <p:dataTable value="#{produtoBean.produtos}" var="produto" id="dtProdutos" >
+                    <p:column headerText="Produto">
+                        <h:outputText value="#{produto.nome}" />
+                    </p:column>
+                    <p:column headerText="Valor Unitário" style="width: 100px">
+                        <h:outputText value="#{produto.valorUnitario}" />
+                    </p:column>
+                    <p:column headerText="Estoque" style="width: 100px">
+                        <h:outputText value="#{produto.estoque}" />
+                    </p:column>
+                    <p:column headerText="Opções" style="width: 200px">
+                        <h:commandLink value="Editar" action="#{produtoBean.editar(produto)}" />
+                    </p:column>
+                </p:dataTable>
             </p:dialog>
         </h:form>
     </ui:define>
