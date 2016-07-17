@@ -20,17 +20,18 @@
                 </p:submenu>
                 <p:submenu label="Cadastros">
                     <p:menuitem value="Fornecedores" outcome="/app/cadastros/CadastroFornecedor"
-                                disabled="#{!funcionarioBean.funcionario.admin}"/>
+                                disabled="#{!autenticacaoBean.funcionario.admin}"/>
                     <p:menuitem value="Clientes" outcome="/app/cadastros/CadastroCliente"
-                                disabled="#{!funcionarioBean.funcionario.admin}"/>
+                                disabled="#{!autenticacaoBean.funcionario.admin}"/>
                     <p:menuitem value="Produtos" outcome="/app/cadastros/CadastroProduto"
-                                disabled="#{!funcionarioBean.funcionario.admin}"/>
+                                disabled="#{!autenticacaoBean.funcionario.admin}"/>
                     <p:menuitem value="Funcionários" outcome="/app/cadastros/CadastroFuncionario"
-                                disabled="#{!funcionarioBean.funcionario.admin}"/>
+                                disabled="#{!autenticacaoBean.funcionario.admin}"/>
                 </p:submenu>
                 <f:facet name="options">
                     <h:outputText value="Funcionário: "/>
-                    <h:outputText value="#{autenticacaoBean.funcionario.nome}"/>
+                    <h:outputText value="#{autenticacaoBean.funcionario.nome} : 
+                                  #{autenticacaoBean.funcionario.admin ? 'Admin' : 'Operador'}"/>
                     <p:spacer width="20px"/>
                     <p:commandButton value="Sair" action="#{autenticacaoBean.logout()}"/>
                 </f:facet>
