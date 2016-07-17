@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="titulo">Cadastro de Funcionários</ui:define>
+
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages autoUpdate="true" />
+            <br/>
+            <p:focus context="pnl" />
+            <p:panel id="pnl">
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton type="button" value="Consultar Funcionário"
+                                         onclick="PF('pesquisaFuncionario').show();" />
+                        <p:commandButton value="Novo" action="#{funcionarioBean.novo()}"
+                                         update="@form"/>
+                    </f:facet>
+                    <f:facet name="right">
+                        <p:commandButton value="Salvar" action="#{funcionarioBean.salvar()}"
+                                         disabled="#{funcionarioBean.habilitaEdicao}" update="@form" />
+                        <p:commandButton value="Atualizar" action="#{funcionarioBean.atualizar()}"
+                                         disabled="#{!funcionarioBean.habilitaEdicao}" update="@form"/>
+                    </f:facet>
+                </p:toolbar>
+                <br/>
+                <h:outputText value="Os campos marcados com * são obrigatórios!"
+                              style="color: red"/>
+                <p:panelGrid columns="2" id="cadFuncionario">
+                    <p:column>
+                        <p:inputText placeholder="Nome:" style="width: 400px"
+                                     value="#{funcionarioBean.funcionario.nome}"
+                                     required="true" requiredMessage="Campo Nome Obrigatório!"/> *
+                    </p:column>
+                    <p:inputText placeholder="Endereço:" style="width: 400px"
+                                 value="#{funcionarioBean.funcionario.endereco}"/>
+                    <p:calendar placeholder="Data Nascimento:" navigator="true"
+                                locale="pt_BR" yearRange="c-100:c+10"
+                                value="#{funcionarioBean.funcionario.dataNascimento}" />
+                    <p:column>
+                        <p:selectBooleanCheckbox value="#{funcionarioBean.funcionario.admin}" />
+                        <h:outputText value=" Administrador?"/>
+                    </p:column>
+
+                    <p:column>
+                        <p:selectOneMenu value="#{funcionarioBean.estado}" >
+                            <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
+                            <f:selectItems value="#{funcionarioBean.estados}" var="estado"
+                                           itemValue="#{estado}" itemLabel="#{estado.nome}"/>
+                            <f:ajax render="combo-cidade" event="change"
+                                    listener="#{funcionarioBean.getCidadesDoEstado(event)}"/>
+                        </p:selectOneMenu> *
+                    </p:column>
+
+                    <p:column>
+                        <p:selectOneMenu id="combo-cidade" value="#{funcionarioBean.funcionario.cidade}" >
+                            <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
+                            <f:selectItems value="#{funcionarioBean.cidades}" var="cidade"
+                                           itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>
+                        </p:selectOneMenu> *
+                    </p:column>
+
+                    <p:inputText placeholder="Login:" style="width: 400px"
+                                 value="#{funcionarioBean.funcionario.login}"/>
+                    <p:password placeholder="Senha:" style="width: 400px"
+                                value="#{funcionarioBean.funcionario.senha}"
+                                feedback="true" weakLabel="senha fraca" redisplay="true"
+                                goodLabel="senha boa" strongLabel="senha ótima"/>
+                </p:panelGrid>
+            </p:panel>
+            <p:ajaxStatus onstart="PF('statusDialog').show();"
+                          onsuccess="PF('statusDialog').hide();"/>
+            <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
+                      showHeader="false" closable="false" draggable="false">
+                <p:graphicImage library="images" name="carregando.gif" />
+            </p:dialog>
+        </h:form>
+        <h:form id="frmPesquisa" >
+            <p:dialog widgetVar="pesquisaFuncionario" modal="true" resizable="false"
+                      width="900" height="400" >
+                <h:panelGrid columns="2">
+                    <p:inputText placeholder="Funcionário" size="35" 
+                                 value="#{funcionarioBean.funcionario.nome}" />
+                    <p:commandButton value="Pesquisar" action="#{funcionarioBean.buscaFuncionariosPorNome()}"
+                                     update="dtFuncionarios"/>
+                </h:panelGrid>
+                <p:dataTable id="dtFuncionarios" value="#{funcionarioBean.funcionarios}"
+                             var="funcionario">
+                    <p:column headerText="Funcionário">
+                        <h:outputText value="#{funcionario.nome}" />
+                    </p:column>
+                    <p:column headerText="Endereço">
+                        <h:outputText value="#{funcionario.endereco}" />
+                    </p:column>
+                    <p:column headerText="Opções">
+                        <p:commandLink value="Editar" action="#{funcionarioBean.editar(funcionario)}" />
+                    </p:column>
+                </p:dataTable>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+
+</ui:composition>
+

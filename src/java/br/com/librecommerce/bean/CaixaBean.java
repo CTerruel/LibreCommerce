@@ -60,7 +60,7 @@ public class CaixaBean {
         return "GerenciarCaixa";
     }
 
-    public void adicionaCaixaNaSessao(Caixa caixa) {
+    private void adicionaCaixaNaSessao(Caixa caixa) {
         FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("caixa", caixa);
     }
 

@@ -24,46 +24,91 @@ import javax.faces.event.AjaxBehaviorEvent;
 @ManagedBean
 @SessionScoped
 public class FuncionarioBean {
-    
+
     private Funcionario funcionario;
     private Estado estado;
     private List<Funcionario> funcionarios;
     private List<Estado> estados;
     private List<Cidade> cidades;
-    
+    private boolean habilitaEdicao = false;
+
     /**
      * Creates a new instance of FuncionarioBean
      */
     public FuncionarioBean() {
         funcionario = new Funcionario();
         estado = new Estado();
-        funcionarios = new FuncionarioDao().listarTodos();
-        estados = new EstadoDao().buscarTodos();
+        funcionarios = getTodosFuncionarios();
+        estados = getTodosEstados();
     }
-    
+
     public void getCidadesDoEstado(AjaxBehaviorEvent event) {
-        cidades = new CidadeDao().buscarTodasDoEstado(estado);
+        try {
+            cidades = new CidadeDao().buscarTodasDoEstado(estado);
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
+    }
+
+    public void buscaFuncionariosPorNome() {
+        try {
+            funcionarios = new FuncionarioDao().buscarFuncionariosPorNome(funcionario.getNome());
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
     }
     
-    public void buscaFuncionarioPorNome() {
-        funcionarios = new FuncionarioDao().buscarFuncionarioPorNome(funcionario.getNome());
+    public String novo() {
+        funcionario = new Funcionario();
+        return "CadastroFuncionario";
     }
-    
+
     public void salvar() {
-        new FuncionarioDao().salvar(funcionario);
-        funcionario = new Funcionario();
-        FacesUtil.showInfoMessage("Funcionário salvo com sucesso!", null);
+        try {
+            new FuncionarioDao().salvar(funcionario);
+            funcionario = new Funcionario();
+            FacesUtil.showInfoMessage("Funcionário salvo com sucesso!", null);
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
+
     }
-    
+
     public void atualizar() {
-        new FuncionarioDao().atualizar(funcionario);
-        funcionario = new Funcionario();
-        FacesUtil.showInfoMessage("Funcionário atualizado!", null);
+        try {
+            new FuncionarioDao().atualizar(funcionario);
+            funcionario = new Funcionario();
+            FacesUtil.showInfoMessage("Funcionário atualizado!", null);
+        } 
+        catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
+
     }
-    
+
     public String editar(Funcionario funcionario) {
         this.funcionario = funcionario;
+        System.out.println(funcionario.getSenha());
+        this.habilitaEdicao = true;
         return "CadastroFuncionario?faces-redirect=true";
+    }
+
+    private List<Funcionario> getTodosFuncionarios() {
+        try {
+            return new FuncionarioDao().listarTodos();
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+            return null;
+        }
+    }
+    
+    private List<Estado> getTodosEstados() {
+        try {
+            return new EstadoDao().buscarTodos();
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+            return null;
+        }
     }
     
     public Funcionario getFuncionario() {
@@ -104,6 +149,14 @@ public class FuncionarioBean {
 
     public void setCidades(List<Cidade> cidades) {
         this.cidades = cidades;
+    }
+
+    public boolean isHabilitaEdicao() {
+        return habilitaEdicao;
+    }
+
+    public void setHabilitaEdicao(boolean habilitaEdicao) {
+        this.habilitaEdicao = habilitaEdicao;
     }
 
 }

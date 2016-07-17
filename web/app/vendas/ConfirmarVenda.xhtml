@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="titulo">Confirmar Venda</ui:define>
+
+    <ui:define name="conteudo">
+        <br/>
+        <h:form id="frmVenda">
+            <p:panel style="width: 540px; margin-left: 25%" header="Confirmação de Venda" >
+                <p:messages autoUpdate="true" />
+                <p:panelGrid columns="2">
+                    <h:outputLabel value="Cliente: "/>
+                    <p:commandButton value="#{novaVendaBean.nomeCliente == '' ? 'Selecionar Cliente...' : novaVendaBean.nomeCliente}" 
+                                     type="button" 
+                                     onclick="PF('modalPesquisarCliente').show();" />
+                    <h:outputLabel value="Forma de pagamento: " />
+                    <p:selectOneMenu value="#{novaVendaBean.venda.formaPagamento}"
+                                     required="true" requiredMessage="Escolha a forma de Pagamento!">
+                        <f:selectItem itemLabel="Selecione" noSelectionOption="true" />
+                        <f:selectItems value="#{novaVendaBean.formasPagamentos}"
+                                       var="formaPagamento" itemLabel="#{formaPagamento.label}"
+                                       itemValue="#{formaPagamento}" />
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Valor Recebido R$: " />
+                    <p:inputText value="#{novaVendaBean.venda.valorPago}" >
+                        <p:ajax event="keyup" listener="#{novaVendaBean.atualizaTroco()}"
+                                update="lblTroco"/>
+                    </p:inputText>
+                    <h:outputLabel value="Total da Venda R$: " style="font-size: x-large; color: blue" />
+                    <h:outputText value="#{novaVendaBean.venda.totalVenda}" style="font-size: xx-large" />
+                    <h:outputLabel value="Troco R$: " style="font-size: x-large; color: blue" />
+                    <h:outputText id="lblTroco" value="#{novaVendaBean.venda.troco}"
+                                  style="font-size: xx-large"/>
+                    <p:spacer />
+                    <h:panelGroup>
+                        <p:commandButton value="Confirmar" action="#{novaVendaBean.salvar()}" />
+                        <p:spacer width="10px" />
+                        <p:commandButton value="Cancelar" action="#{novaVendaBean.cancelarVendaPasso2()}" />
+                    </h:panelGroup>
+                </p:panelGrid>
+            </p:panel>
+            <p:ajaxStatus onstart="PF('statusDialog').show();"
+                          onsuccess="PF('statusDialog').hide();"/>
+            <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
+                      showHeader="false" closable="false" draggable="false">
+                <p:graphicImage library="images" name="carregando.gif" />
+            </p:dialog>
+        </h:form>
+        <h:form id="frmPesquisa">
+            <p:dialog header="Pesquisar Cliente" widgetVar="modalPesquisarCliente"
+                      modal="true" resizable="false" minHeight="400" minWidth="400" >
+                <h:panelGrid columns="2">
+                    <p:inputText size="30" placeholder="Nome do Cliente" value="#{novaVendaBean.buscaNomeCliente}" />
+                    <p:commandButton value="Buscar" action="#{novaVendaBean.buscatClientesPorNome()}"
+                                     update="dtClientes"/>
+                </h:panelGrid>
+                <p:dataTable id="dtClientes" style="width: 600px" value="#{novaVendaBean.clientes}"
+                             var="cliente">
+                    <p:column headerText="Cliente">
+                        <h:outputText value="#{cliente.nome}" />
+                    </p:column>
+                    <p:column headerText="Opções" style="width: 150px">
+                        <p:commandLink value="Escolher" 
+                                       action="#{novaVendaBean.escolheCliente(cliente)}"
+                                       onclick="PF('modalPesquisarCliente').hide();"
+                                       update="frmVenda"/>
+                    </p:column>
+                </p:dataTable>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
+

@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="titulo">Cadastro de Produtos</ui:define>
+
+    <ui:define name="conteudo">
+        <h:form>
+            <p:messages autoUpdate="true" />
+            <br/>
+            <p:focus context="pnl" />
+            <p:panel id="pnl">
+                <p:toolbar>
+                    <f:facet name="left">
+                        <p:commandButton type="button" value="Consultar Produto" 
+                                         onclick="PF('pesquisaProduto').show();" />
+                    </f:facet>
+                    <f:facet name="right">
+                        <p:commandButton value="Salvar" action="#{produtoBean.salvar()}"
+                                         update="@form" disabled="#{produtoBean.habilitaEdicao}"/>
+                        <p:commandButton value="Atualizar" action="#{produtoBean.atualizar()}"
+                                         update="@form" disabled="#{!produtoBean.habilitaEdicao}"/>
+                    </f:facet>
+                </p:toolbar>
+                <br/>
+                <p:panelGrid columns="2">
+                    <p:inputText placeholder="Nome do Produto" value="#{produtoBean.produto.nome}"
+                                 required="true" requiredMessage="Campo Produto Obrigatório"/>
+                    <p:inputText placeholder="Código de Barra" value="#{produtoBean.produto.codigoBarra}"
+                                 required="true" requiredMessage="Campo Cod de Barra Obrigatório"/>
+                    <p:inputText placeholder="Valor Unitário" value="#{produtoBean.produto.valorUnitario}"
+                                 required="true" requiredMessage="Campo Valor Unitário Obrigatório"/>
+                    <p:inputText placeholder="Qtdd em Estoque" value="#{produtoBean.produto.estoque}"
+                                 required="true" requiredMessage="Campo Estoque Obrigatório"/>
+                    <p:selectOneMenu value="#{produtoBean.produto.categoria}" >
+                        <f:selectItem itemLabel="Categoria" noSelectionOption="true"/>
+                        <f:selectItems value="#{produtoBean.categorias}" var="categoria"
+                                       itemLabel="#{categoria.nome}" itemValue="#{categoria}"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+            </p:panel>
+            <p:ajaxStatus onstart="PF('statusDialog').show();"
+                          onsuccess="PF('statusDialog').hide();"/>
+            <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
+                      showHeader="false" closable="false" draggable="false">
+                <p:graphicImage library="images" name="carregando.gif" />
+            </p:dialog>
+        </h:form>
+        <h:form id="frmPesquisa">
+            <p:dialog widgetVar="pesquisaProduto" modal="true" resizable="false" width="900"
+                      height="400" header="Pesquisar Produto">
+                <p:messages autoUpdate="true" />
+                <h:panelGrid columns="2">
+                    <p:inputText placeholder="Produto" size="35" value="#{produtoBean.produto.nome}" />
+                    <p:commandButton value="Pesquisar" action="#{produtoBean.buscaProdutoPorNome()}" 
+                                     update="dtProdutos"/>
+                </h:panelGrid>
+                <p:dataTable value="#{produtoBean.produtos}" var="produto" id="dtProdutos" >
+                    <p:column headerText="Produto">
+                        <h:outputText value="#{produto.nome}" />
+                    </p:column>
+                    <p:column headerText="Valor Unitário" style="width: 100px">
+                        <h:outputText value="#{produto.valorUnitario}" />
+                    </p:column>
+                    <p:column headerText="Estoque" style="width: 100px">
+                        <h:outputText value="#{produto.estoque}" />
+                    </p:column>
+                    <p:column headerText="Opções" style="width: 200px">
+                        <h:commandLink value="Editar" action="#{produtoBean.editar(produto)}" />
+                    </p:column>
+                </p:dataTable>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

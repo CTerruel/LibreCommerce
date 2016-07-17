@@ -16,21 +16,16 @@ import javax.persistence.EntityManager;
  * @author Clovis
  */
 public class EstadoDao extends GenericDao<Estado> {
-    
-    public List<Estado> buscarTodos() {
+
+    public List<Estado> buscarTodos() throws Exception {
         EntityManager em = EntityManagerUtil.getInstance();
         List<Estado> estados = null;
-        try {
-            estados = em.createQuery("FROM Estado e").getResultList();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return estados;
-        }
-        finally {
-            em.close();
-        }
+
+        estados = em.createQuery("FROM Estado e").getResultList();
+        
+        em.close();
+
         return estados;
     }
-    
+
 }

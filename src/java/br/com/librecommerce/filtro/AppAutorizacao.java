@@ -25,8 +25,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Clovis
  */
-@WebFilter(filterName = "LoginAutenticacao", urlPatterns = {"/faces/seguranca/login.xhtml"})
-public class LoginAutenticacao implements Filter {
+@WebFilter(filterName = "AppAutorizacao", urlPatterns = {"/faces/app/cadastros/*"})
+public class AppAutorizacao implements Filter {
     
     private static final boolean debug = true;
 
@@ -35,13 +35,13 @@ public class LoginAutenticacao implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public LoginAutenticacao() {
+    public AppAutorizacao() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("LoginAutenticacao:DoBeforeProcessing");
+            log("AppAutorizacao:DoBeforeProcessing");
         }
 
         // Write code here to process the request and/or response before
@@ -69,7 +69,7 @@ public class LoginAutenticacao implements Filter {
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("LoginAutenticacao:DoAfterProcessing");
+            log("AppAutorizacao:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -100,7 +100,6 @@ public class LoginAutenticacao implements Filter {
      * @exception IOException if an input/output error occurs
      * @exception ServletException if a servlet error occurs
      */
-    @Override
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
@@ -111,11 +110,13 @@ public class LoginAutenticacao implements Filter {
         
         Funcionario funcionario = (Funcionario) session.getAttribute("login");
         
-        if (funcionario == null) {
+        if (funcionario.isAdmin()) {
+            //resp.sendRedirect(req.getContextPath() + "/faces/seguranca/login.xhtml");
             chain.doFilter(request, response);
         }
         else {
-            resp.sendRedirect(req.getContextPath() + "/faces/app/vendas/GerenciarCaixa.xhtml");
+            resp.sendRedirect(req.getContextPath() + "/faces/app/pageError/pageError.xhtml");
+            //chain.doFilter(request, response);
         }
         
     }
@@ -149,7 +150,7 @@ public class LoginAutenticacao implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("LoginAutenticacao:Initializing filter");
+                log("AppAutorizacao:Initializing filter");
             }
         }
     }
@@ -160,9 +161,9 @@ public class LoginAutenticacao implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("LoginAutenticacao()");
+            return ("AppAutorizacao()");
         }
-        StringBuffer sb = new StringBuffer("LoginAutenticacao(");
+        StringBuffer sb = new StringBuffer("AppAutorizacao(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());

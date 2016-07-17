@@ -17,49 +17,40 @@ import javax.persistence.NoResultException;
  */
 public class FuncionarioDao extends GenericDao<Funcionario> {
 
-    public Funcionario login(Funcionario f) {
+    public Funcionario login(Funcionario funcionario) throws Exception, NoResultException {
         EntityManager em = EntityManagerUtil.getInstance();
-        try {
-            f = (Funcionario) em.createQuery("SELECT f FROM Funcionario f WHERE f.login = :login AND f.senha = :senha")
-                    .setParameter("login", f.getLogin())
-                    .setParameter("senha", f.getSenha())
-                    .getSingleResult();
-            System.out.println("nome: " + f.getNome() + " " + f.isAdmin());
-            return f;
-        } 
-        catch (NoResultException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
+
+        funcionario = (Funcionario) em.createQuery("SELECT f FROM Funcionario f WHERE f.login = :login AND f.senha = :senha")
+                .setParameter("login", funcionario.getLogin())
+                .setParameter("senha", funcionario.getSenha())
+                .getSingleResult();
+
+        em.close();
+
+        return funcionario;
 
     }
 
-    public List<Funcionario> buscarFuncionarioPorNome(String nome) {
+    public List<Funcionario> buscarFuncionariosPorNome(String nome) throws Exception {
         EntityManager em = EntityManagerUtil.getInstance();
         List<Funcionario> funcionarios = null;
-        try {
-            funcionarios = em.createQuery("SELECT f FROM Funcionario f WHERE f.nome LIKE :nome")
-                    .setParameter("nome", "%" + nome + "%")
-                    .getResultList();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return funcionarios;
-        } finally {
-            em.close();
-        }
+
+        funcionarios = em.createQuery("SELECT f FROM Funcionario f WHERE f.nome LIKE :nome")
+                .setParameter("nome", "%" + nome + "%")
+                .getResultList();
+        
+        em.close();
+
         return funcionarios;
     }
 
-    public List<Funcionario> listarTodos() {
+    public List<Funcionario> listarTodos() throws Exception {
         EntityManager em = EntityManagerUtil.getInstance();
         List<Funcionario> funcionarios = null;
-        try {
-            funcionarios = em.createQuery("FROM Funcionario f").getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return funcionarios;
-        }
+
+        funcionarios = em.createQuery("FROM Funcionario f").getResultList();
+
+        em.close();
 
         return funcionarios;
     }

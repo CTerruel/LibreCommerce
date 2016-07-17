@@ -17,54 +17,40 @@ import javax.persistence.NoResultException;
  */
 public class ProdutoDao extends GenericDao<Produto> {
 
-    public Produto buscarProdutoPorCodigoBarra(int codigoBarra) {
+    public Produto buscarProdutoPorCodigoBarra(int codigoBarra) throws Exception, NoResultException {
         EntityManager em = EntityManagerUtil.getInstance();
         Produto p = null;
-        try {
-            p = (Produto) em.createQuery("SELECT p FROM Produto p WHERE P.codigoBarra = :codigoBarra")
-                    .setParameter("codigoBarra", codigoBarra)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            System.out.println(e.getMessage());
-            return p;
-        } finally {
-            em.close();
 
-        }
+        p = (Produto) em.createQuery("SELECT p FROM Produto p WHERE P.codigoBarra = :codigoBarra")
+                .setParameter("codigoBarra", codigoBarra)
+                .getSingleResult();
+        
+        em.close();
+
         return p;
     }
-    
-    public List<Produto> buscaProdutoPorNome(String nome) {
+
+    public List<Produto> buscaProdutoPorNome(String nome) throws Exception {
         EntityManager em = EntityManagerUtil.getInstance();
         List<Produto> produtos = null;
-        try {
-            produtos = em.createQuery("SELECT p FROM Produto p WHERE p.nome LIKE :nome")
-                    .setParameter("nome", "%" + nome + "%")
-                    .getResultList();
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-            return produtos;
-        }
-        finally {
-            em.close();
-        }
+
+        produtos = em.createQuery("SELECT p FROM Produto p WHERE p.nome LIKE :nome")
+                .setParameter("nome", "%" + nome + "%")
+                .getResultList();
+
+        em.close();
+
         return produtos;
     }
-    
-    public List<Produto> listarTodos() {
+
+    public List<Produto> listarTodos() throws Exception {
         EntityManager em = EntityManagerUtil.getInstance();
         List<Produto> produtos = null;
-        try {
-            produtos = em.createQuery("FROM Produto p").getResultList();
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-            return produtos;
-        }
-        finally {
-            em.close();
-        }
+        
+        produtos = em.createQuery("FROM Produto p").getResultList();
+        
+        em.close();
+        
         return produtos;
     }
 

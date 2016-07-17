@@ -30,37 +30,79 @@ public class FornecedorBean {
     private List<Fornecedor> fornecedores;
     private List<Estado> estados;
     private List<Cidade> cidades;
+    private boolean habilitaEdicao = false;
 
     /**
      * Creates a new instance of CadastroFornecedorBean
      */
     public FornecedorBean() {
         fornecedor = new Fornecedor();
-        estados = new EstadoDao().buscarTodos();
-        fornecedores = new FornecedorDao().listarTodos();
+        estados = getTodosEstados();
+        fornecedores = getTodosFornecedores();
     }
     
     public void getCidadesDoEstado(AjaxBehaviorEvent event) {
-        cidades = new CidadeDao().buscarTodasDoEstado(estado);
+        try {
+            cidades = new CidadeDao().buscarTodasDoEstado(estado);
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
     }
     
     public void buscaFornecedorPorNome() {
-        fornecedores = new FornecedorDao().buscarFornecedoresPorNome(fornecedor.getNome());
+        try {
+            fornecedores = new FornecedorDao().buscarFornecedoresPorNome(fornecedor.getNome());
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
     }
     
     public void salvar() {
-        new FornecedorDao().salvar(fornecedor);
-        FacesUtil.showInfoMessage("Fornecedor salvo com sucesso!", null);
+        try {
+            new FornecedorDao().salvar(fornecedor);
+            fornecedor = new Fornecedor();
+            FacesUtil.showInfoMessage("Fornecedor salvo com sucesso!", null);
+        } 
+        catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
+        
     }
     
     public void atualizar() {
-        new FornecedorDao().atualizar(fornecedor);
-        FacesUtil.showInfoMessage("Fornecedor atualizado", null);
+        try {
+            new FornecedorDao().atualizar(fornecedor);
+            fornecedor = new Fornecedor();
+            FacesUtil.showInfoMessage("Fornecedor atualizado", null);
+        } 
+        catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
+        
     }
     
     public String editar(Fornecedor fornecedor) {
         this.fornecedor = fornecedor;
+        this.habilitaEdicao = true;
         return "CadastroFornecedor?faces-redirect=true";
+    }
+    
+    private List<Estado> getTodosEstados() {
+        try {
+            return new EstadoDao().buscarTodos();
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+            return null;
+        }
+    }
+    
+    private List<Fornecedor> getTodosFornecedores() {
+        try {
+            return new FornecedorDao().listarTodos();
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+            return null;
+        }
     }
 
     public Fornecedor getFornecedor() {
@@ -103,5 +145,12 @@ public class FornecedorBean {
         this.cidades = cidades;
     }
 
+    public boolean isHabilitaEdicao() {
+        return habilitaEdicao;
+    }
+
+    public void setHabilitaEdicao(boolean habilitaEdicao) {
+        this.habilitaEdicao = habilitaEdicao;
+    }
     
 }

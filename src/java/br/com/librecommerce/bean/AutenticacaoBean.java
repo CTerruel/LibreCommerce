@@ -11,6 +11,7 @@ import br.com.librecommerce.util.FacesUtil;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -37,16 +38,24 @@ public class AutenticacaoBean {
             return "/seguranca/login";
         }
         
-        funcionario = new FuncionarioDao().login(funcionario);
-        if (funcionario != null) {
+        try {
+            funcionario = new FuncionarioDao().login(funcionario);
+            
+            //FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("login", funcionario);
             HttpSession session = 
                     (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
             session.setAttribute("login", funcionario);
-            return "/app/GerenciarCaixa?faces-redirect=true";
-        }
-        else {
-            funcionario = new Funcionario();
+            
+            return "/app/vendas/GerenciarCaixa?faces-redirect=true";
+        } 
+        catch (NoResultException nex) {
             FacesUtil.showAlertMessage("Usuário não encontrado!", null);
+            funcionario = new Funcionario();
+            return "/seguranca/login";
+        }
+        catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+            funcionario = new Funcionario();
             return "/seguranca/login";
         }
         

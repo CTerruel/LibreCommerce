@@ -16,22 +16,17 @@ import javax.persistence.EntityManager;
  * @author Clovis
  */
 public class CidadeDao extends GenericDao<Cidade> {
-    
-    public List<Cidade> buscarTodasDoEstado(Estado estado) {
+
+    public List<Cidade> buscarTodasDoEstado(Estado estado) throws Exception {
         EntityManager em = EntityManagerUtil.getInstance();
         List<Cidade> cidades = null;
-        try {
-            cidades = em.createQuery("SELECT c FROM Cidade c WHERE c.estado = :Estado")
-                    .setParameter("Estado", estado).getResultList();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return cidades;
-        }
-        finally {
-            em.close();
-        }
+
+        cidades = em.createQuery("SELECT c FROM Cidade c WHERE c.estado = :Estado")
+                .setParameter("Estado", estado).getResultList();
+        
+        em.close();
+
         return cidades;
     }
-    
+
 }

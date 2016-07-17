@@ -21,39 +21,62 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class ProdutoBean {
-    
+
     private Produto produto;
     private List<Categoria> categorias;
     private List<Produto> produtos;
-    
+    private boolean habilitaEdicao = false;
+
     /**
      * Creates a new instance of ProdutoBean
      */
     public ProdutoBean() {
         produto = new Produto();
-        produtos = new ProdutoDao().listarTodos();
+
+        try {
+            produtos = new ProdutoDao().listarTodos();
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
+
         categorias = new CategoriaDao().listarTodos();
     }
-    
+
     public void buscaProdutoPorNome() {
-        produtos = new ProdutoDao().buscaProdutoPorNome(produto.getNome());
-        System.out.println("nome " + produto.getNome());
+        try {
+            produtos = new ProdutoDao().buscaProdutoPorNome(produto.getNome());
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
+
     }
-    
+
     public void salvar() {
-        new ProdutoDao().salvar(produto);
-        produto = new Produto();
-        FacesUtil.showInfoMessage("Produto salvo com sucesso!", null);
+        try {
+            new ProdutoDao().salvar(produto);
+            produto = new Produto();
+            FacesUtil.showInfoMessage("Produto salvo com sucesso!", null);
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
+
     }
-    
+
     public void atualizar() {
-        new ProdutoDao().atualizar(produto);
-        produto = new Produto();
-        FacesUtil.showInfoMessage("Produto atualizado!", null);
+        try {
+            new ProdutoDao().atualizar(produto);
+            produto = new Produto();
+            FacesUtil.showInfoMessage("Produto atualizado!", null);
+        } 
+        catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
+
     }
-    
+
     public String editar(Produto produto) {
         this.produto = produto;
+        this.habilitaEdicao = true;
         return "CadastroProduto?faces-redirect=true";
     }
 
@@ -80,6 +103,13 @@ public class ProdutoBean {
     public void setProdutos(List<Produto> produtos) {
         this.produtos = produtos;
     }
-    
-    
+
+    public boolean isHabilitaEdicao() {
+        return habilitaEdicao;
+    }
+
+    public void setHabilitaEdicao(boolean habilitaEdicao) {
+        this.habilitaEdicao = habilitaEdicao;
+    }
+
 }

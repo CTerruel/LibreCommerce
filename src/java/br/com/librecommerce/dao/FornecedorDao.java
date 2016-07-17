@@ -15,39 +15,29 @@ import javax.persistence.EntityManager;
  * @author Clovis
  */
 public class FornecedorDao extends GenericDao<Fornecedor> {
-    
-    public List<Fornecedor> buscarFornecedoresPorNome(String nome) {
+
+    public List<Fornecedor> buscarFornecedoresPorNome(String nome) throws Exception {
         EntityManager em = EntityManagerUtil.getInstance();
         List<Fornecedor> fornecedores = null;
-        try {
-            fornecedores = em.createQuery("SELECT f FROM Fornecedor f WHERE f.nome LIKE :nome")
-                    .setParameter("nome", "%" + nome + "%")
-                    .getResultList();
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-            return fornecedores;
-        }
-        finally {
-            em.close();
-        }
+
+        fornecedores = em.createQuery("SELECT f FROM Fornecedor f WHERE f.nome LIKE :nome")
+                .setParameter("nome", "%" + nome + "%")
+                .getResultList();
+        
+        em.close();
+
         return fornecedores;
     }
-    
-    public List<Fornecedor> listarTodos() {
+
+    public List<Fornecedor> listarTodos() throws Exception {
         EntityManager em = EntityManagerUtil.getInstance();
         List<Fornecedor> fornecedores = null;
-        try {
-            fornecedores = em.createQuery("FROM Fornecedor f").getResultList();
-        } 
-        catch (Exception e) {
-            e.printStackTrace();
-            return fornecedores;
-        }
-        finally {
-            em.close();
-        }
+
+        fornecedores = em.createQuery("FROM Fornecedor f").getResultList();
+
+        em.close();
+
         return fornecedores;
     }
-    
+
 }

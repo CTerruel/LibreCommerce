@@ -17,21 +17,18 @@ import javax.persistence.EntityManager;
  */
 public class VendaDao {
 
-    public boolean salvar(Venda venda) {
+    public void salvar(Venda venda) throws Exception {
         EntityManager em = EntityManagerUtil.getInstance();
-        try {
-            em.getTransaction().begin();
-            em.persist(venda);
-            atualizarEstoque(venda.getItensVenda(), em);
-            em.getTransaction().commit();
 
-            return true;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return false;
-        } finally {
-            em.close();
-        }
+        em.getTransaction().begin();
+        em.persist(venda);
+        
+        atualizarEstoque(venda.getItensVenda(), em);
+        
+        em.getTransaction().commit();
+        
+        em.close();
+
     }
 
     private void atualizarEstoque(List<ItemVenda> itensVenda, EntityManager em) {

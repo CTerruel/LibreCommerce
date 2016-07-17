@@ -16,13 +16,17 @@
         <h:form>
             <p:menubar>
                 <p:submenu label="Caixa">
-                    <p:menuitem value="Gerenciar Caixa" outcome="/app/GerenciarCaixa"/>
+                    <p:menuitem value="Gerenciar Caixa" outcome="/app/vendas/GerenciarCaixa"/>
                 </p:submenu>
                 <p:submenu label="Cadastros">
-                    <p:menuitem value="Fornecedores" outcome="/app/CadastroFornecedor"/>
-                    <p:menuitem value="Clientes" outcome="/app/CadastroCliente"/>
-                    <p:menuitem value="Produtos" outcome="/app/CadastroProduto"/>
-                    <p:menuitem value="Funcionários" outcome="/app/CadastroFuncionario"/>
+                    <p:menuitem value="Fornecedores" outcome="/app/cadastros/CadastroFornecedor"
+                                disabled="#{!funcionarioBean.funcionario.admin}"/>
+                    <p:menuitem value="Clientes" outcome="/app/cadastros/CadastroCliente"
+                                disabled="#{!funcionarioBean.funcionario.admin}"/>
+                    <p:menuitem value="Produtos" outcome="/app/cadastros/CadastroProduto"
+                                disabled="#{!funcionarioBean.funcionario.admin}"/>
+                    <p:menuitem value="Funcionários" outcome="/app/cadastros/CadastroFuncionario"
+                                disabled="#{!funcionarioBean.funcionario.admin}"/>
                 </p:submenu>
                 <f:facet name="options">
                     <h:outputText value="Funcionário: "/>

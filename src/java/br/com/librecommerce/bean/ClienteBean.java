@@ -15,6 +15,7 @@ import br.com.librecommerce.util.FacesUtil;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -23,12 +24,13 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class ClienteBean {
-    
+
     private Cliente cliente;
     private Estado estado;
     private List<Cliente> clientes;
     private List<Estado> estados;
     private List<Cidade> cidades;
+    private boolean habilitaEdicao = false;
 
     /**
      * Creates a new instance of ClienteBean
@@ -36,35 +38,78 @@ public class ClienteBean {
     public ClienteBean() {
         cliente = new Cliente();
         estado = new Estado();
-        clientes = new ClienteDao().listarTodos();
-        estados = new EstadoDao().buscarTodos();
+        clientes = getTodosClientes();
+        estados = getTodosEstados();
     }
-    
+
     public void buscaCidadesDoEstado() {
-        cidades = new CidadeDao().buscarTodasDoEstado(estado);
+        try {
+            cidades = new CidadeDao().buscarTodasDoEstado(estado);
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
     }
-    
+
     public void buscaClientesPorNome() {
-        clientes = new ClienteDao().buscarClientesPorNome(cliente.getNome());
+        try {
+            clientes = new ClienteDao().buscarClientesPorNome(cliente.getNome());
+        } 
+        catch (NoResultException nex) {
+            FacesUtil.showAlertMessage("Cliente não encontrado!", null);
+        }
+        catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
     }
-    
+
     public void salvar() {
-        new ClienteDao().salvar(cliente);
-        cliente = new Cliente();
-        FacesUtil.showInfoMessage("Cliente salvo com sucesso!", null);
+        try {
+            new ClienteDao().salvar(cliente);
+            cliente = new Cliente();
+            FacesUtil.showInfoMessage("Cliente salvo com sucesso!", null);
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
+
     }
-    
+
     public void atualizar() {
-        new ClienteDao().atualizar(cliente);
-        cliente = new Cliente();
-        FacesUtil.showInfoMessage("Cliente atualizado!", null);
+        try {
+            new ClienteDao().atualizar(cliente);
+            cliente = new Cliente();
+            FacesUtil.showInfoMessage("Cliente atualizado!", null);
+        } 
+        catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
+
     }
-    
+
     public String editar(Cliente cliente) {
         this.cliente = cliente;
+        this.habilitaEdicao = true;
         return "CadastroCliente?faces-redirect=true";
     }
     
+    private List<Cliente> getTodosClientes() {
+        try {
+            return new ClienteDao().listarTodos();
+        } 
+        catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+            return null;
+        }
+    }
+    
+    private List<Estado> getTodosEstados() {
+        try {
+            return new EstadoDao().buscarTodos();
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+            return null;
+        }
+    }
+
     public Cliente getCliente() {
         return cliente;
     }
@@ -104,6 +149,13 @@ public class ClienteBean {
     public void setCidades(List<Cidade> cidades) {
         this.cidades = cidades;
     }
-    
-    
+
+    public boolean isHabilitaEdicao() {
+        return habilitaEdicao;
+    }
+
+    public void setHabilitaEdicao(boolean habilitaEdicao) {
+        this.habilitaEdicao = habilitaEdicao;
+    }
+
 }

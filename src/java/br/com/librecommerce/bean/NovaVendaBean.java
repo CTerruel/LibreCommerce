@@ -21,6 +21,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -29,7 +30,7 @@ import javax.faces.context.FacesContext;
 @ManagedBean
 @SessionScoped
 public class NovaVendaBean {
-    
+
     private Cliente cliente;
     private Venda venda;
     private Produto produto;
@@ -40,7 +41,7 @@ public class NovaVendaBean {
     private int numeroItem = 1;
     private List<FormaPagamento> formasPagamentos = Arrays.asList(FormaPagamento.values());
     private List<Cliente> clientes;
- 
+
     /**
      * Creates a new instance of NovaVendaBean
      */
@@ -51,26 +52,29 @@ public class NovaVendaBean {
         produto = new Produto();
         caixa = (Caixa) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("caixa");
     }
-    
+
     public String adicionar() {
-        produto = new ProdutoDao().buscarProdutoPorCodigoBarra(produto.getCodigoBarra());
-        if (produto == null) {
-            FacesUtil.showAlertMessage("Produto não encontrado", null);
-            return "NovaVenda";
+        try {
+            produto = new ProdutoDao().buscarProdutoPorCodigoBarra(produto.getCodigoBarra());
+
+            produto.setEstoque(produto.getEstoque() - itemVenda.getQuantidadeProduto());
+            itemVenda.setProduto(produto);
+            itemVenda.setNumeroItem(numeroItem);
+            numeroItem++;
+            itemVenda.setValorTotal(itemVenda.getQuantidadeProduto()
+                    * produto.getValorUnitario());
+            venda.getItensVenda().add(itemVenda);
+            venda.setTotalVenda(venda.getTotalVenda() + itemVenda.getValorTotal());
+            itemVenda.setVenda(venda);
+            itemVenda = new ItemVenda();
+            produto = new Produto();
+
+        } catch (NoResultException nex) {
+            FacesUtil.showAlertMessage("Produto não encontrado!", null);
+        } catch (Exception e) {
+            FacesUtil.showErrorMessage(e.getMessage(), null);
         }
-        produto.setEstoque(produto.getEstoque() - itemVenda.getQuantidadeProduto());
-        System.out.println(produto.getEstoque());
-        itemVenda.setProduto(produto);
-        itemVenda.setNumeroItem(numeroItem);
-        numeroItem++;
-        itemVenda.setValorTotal(itemVenda.getQuantidadeProduto() * 
-                produto.getValorUnitario());
-        venda.getItensVenda().add(itemVenda);
-        venda.setTotalVenda(venda.getTotalVenda() + itemVenda.getValorTotal());
-        itemVenda.setVenda(venda);
-        itemVenda = new ItemVenda();
-        produto = new Produto();
-        
+
         return "NovaVenda";
     }
 
@@ -81,36 +85,65 @@ public class NovaVendaBean {
         }
         return "ConfirmarVenda";
     }
-    
+
     public String salvar() {
-        venda.setCaixa(caixa);
-        venda.setDataVenda(new Date());
-        new VendaDao().salvar(venda);
-        numeroItem = 1;
-        venda = new Venda();
-        cliente = new Cliente();
+        try {
+            venda.setCaixa(caixa);
+            venda.setDataVenda(new Date());
+            
+            new VendaDao().salvar(venda);
+            
+            numeroItem = 1;
+            venda = new Venda();
+            cliente = new Cliente();
+            
+            FacesUtil.showInfoMessage("Venda salva com sucesso!", null);
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
+
         return "NovaVenda";
     }
     
+    public String cancelarVendaPasso1() {
+        clearVenda();
+        return "NovaVenda";
+    }
+    
+    public String cancelarVendaPasso2() {
+        clearVenda();
+        this.nomeCliente = "";
+        return "NovaVenda";
+    }
+    
+    private void clearVenda() {
+        venda.getItensVenda().clear();
+        venda.setTotalVenda(0.0);
+    }
+
     public String removerItem(ItemVenda itemVenda) {
         venda.setTotalVenda(venda.getTotalVenda() - itemVenda.getValorTotal());
         venda.getItensVenda().remove(itemVenda);
         return "NovaVenda";
     }
-    
+
     public void buscatClientesPorNome() {
-        clientes = new ClienteDao().buscarClientesPorNome(buscaNomeCliente);
+        try {
+            clientes = new ClienteDao().buscarClientesPorNome(buscaNomeCliente);
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+        }
     }
-    
+
     public void atualizaTroco() {
         venda.setTroco(venda.getValorPago() - venda.getTotalVenda());
     }
-    
+
     public void escolheCliente(Cliente cliente) {
         this.nomeCliente = cliente.getNome();
         venda.setCliente(cliente);
     }
-    
+
     public Cliente getCliente() {
         return cliente;
     }
@@ -174,5 +207,5 @@ public class NovaVendaBean {
     public void setNomeCliente(String nomeCliente) {
         this.nomeCliente = nomeCliente;
     }
-    
+
 }
