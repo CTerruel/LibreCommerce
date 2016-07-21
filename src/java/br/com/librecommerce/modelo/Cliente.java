@@ -6,10 +6,14 @@
 package br.com.librecommerce.modelo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -25,7 +29,13 @@ public class Cliente extends Pessoa implements Serializable {
     
     private String cpfCnpj;
     private Date dataNascimento;
+    
+    private List<ContaReceber> contasReceber;
 
+    public Cliente() {
+        contasReceber = new ArrayList<>();
+    }
+    
     @Column(length = 25, nullable = false)
     public String getCpfCnpj() {
         return cpfCnpj;
@@ -44,6 +54,15 @@ public class Cliente extends Pessoa implements Serializable {
         this.dataNascimento = dataNascimento;
     }
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliente")
+    public List<ContaReceber> getContasReceber() {
+        return contasReceber;
+    }
+
+    public void setContasReceber(List<ContaReceber> contasReceber) {
+        this.contasReceber = contasReceber;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 5;

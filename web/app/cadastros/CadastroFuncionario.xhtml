@@ -15,13 +15,13 @@
             <p:messages autoUpdate="true" />
             <br/>
             <p:focus context="pnl" />
-            <p:panel id="pnl">
+            <p:panel id="pnl" styleClass="bacground-panel">
                 <p:toolbar>
                     <f:facet name="left">
                         <p:commandButton type="button" value="Consultar Funcionário"
                                          onclick="PF('pesquisaFuncionario').show();" />
                         <p:commandButton value="Novo" action="#{funcionarioBean.novo()}"
-                                         update="@form"/>
+                                         update="@form" disabled="#{!funcionarioBean.habilitaEdicao}"/>
                     </f:facet>
                     <f:facet name="right">
                         <p:commandButton value="Salvar" action="#{funcionarioBean.salvar()}"
@@ -34,41 +34,40 @@
                 <h:outputText value="Os campos marcados com * são obrigatórios!"
                               style="color: red"/>
                 <p:panelGrid columns="2" id="cadFuncionario">
-                    <p:column>
-                        <p:inputText placeholder="Nome:" style="width: 400px"
-                                     value="#{funcionarioBean.funcionario.nome}"
-                                     required="true" requiredMessage="Campo Nome Obrigatório!"/> *
-                    </p:column>
+                    <p:outputLabel value="Nome do Funcionário: *" />
+                    <p:inputText placeholder="Nome:" style="width: 400px"
+                                 value="#{funcionarioBean.funcionario.nome}"
+                                 required="true" requiredMessage="Campo Nome Obrigatório!"/>
+                    <p:outputLabel value="Endereço: " />
                     <p:inputText placeholder="Endereço:" style="width: 400px"
                                  value="#{funcionarioBean.funcionario.endereco}"/>
+                    <p:outputLabel value="Data de Nascimento: " />
                     <p:calendar placeholder="Data Nascimento:" navigator="true"
                                 locale="pt_BR" yearRange="c-100:c+10"
                                 value="#{funcionarioBean.funcionario.dataNascimento}" />
-                    <p:column>
-                        <p:selectBooleanCheckbox value="#{funcionarioBean.funcionario.admin}" />
-                        <h:outputText value=" Administrador?"/>
-                    </p:column>
-
-                    <p:column>
-                        <p:selectOneMenu value="#{funcionarioBean.estado}" >
-                            <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
-                            <f:selectItems value="#{funcionarioBean.estados}" var="estado"
-                                           itemValue="#{estado}" itemLabel="#{estado.nome}"/>
-                            <f:ajax render="combo-cidade" event="change"
-                                    listener="#{funcionarioBean.getCidadesDoEstado(event)}"/>
-                        </p:selectOneMenu> *
-                    </p:column>
-
-                    <p:column>
-                        <p:selectOneMenu id="combo-cidade" value="#{funcionarioBean.funcionario.cidade}" >
-                            <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
-                            <f:selectItems value="#{funcionarioBean.cidades}" var="cidade"
-                                           itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>
-                        </p:selectOneMenu> *
-                    </p:column>
-
+                    <p:outputLabel value="É Administrador?" />
+                    <h:selectOneRadio value="#{funcionarioBean.funcionario.admin}">
+                        <f:selectItem itemLabel="Sim" itemValue="true" />
+                        <f:selectItem itemLabel="Não" itemValue="false" />
+                    </h:selectOneRadio>
+                    <p:outputLabel value="Estado: " />
+                    <p:selectOneMenu value="#{funcionarioBean.estado}" >
+                        <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
+                        <f:selectItems value="#{funcionarioBean.estados}" var="estado"
+                                       itemValue="#{estado}" itemLabel="#{estado.nome}"/>
+                        <f:ajax render="combo-cidade" event="change"
+                                listener="#{funcionarioBean.getCidadesDoEstado(event)}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Cidade: " />
+                    <p:selectOneMenu id="combo-cidade" value="#{funcionarioBean.funcionario.cidade}" >
+                        <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
+                        <f:selectItems value="#{funcionarioBean.cidades}" var="cidade"
+                                       itemValue="#{cidade}" itemLabel="#{cidade.nome}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Login: " />
                     <p:inputText placeholder="Login:" style="width: 400px"
                                  value="#{funcionarioBean.funcionario.login}"/>
+                    <p:outputLabel value="Senha: " />
                     <p:password placeholder="Senha:" style="width: 400px"
                                 value="#{funcionarioBean.funcionario.senha}"
                                 feedback="true" weakLabel="senha fraca" redisplay="true"
@@ -100,7 +99,7 @@
                         <h:outputText value="#{funcionario.endereco}" />
                     </p:column>
                     <p:column headerText="Opções">
-                        <p:commandLink value="Editar" action="#{funcionarioBean.editar(funcionario)}" />
+                        <p:commandLink value="Editar" action="#{funcionarioBean.editar(funcionario)}" update="@form" />
                     </p:column>
                 </p:dataTable>
             </p:dialog>

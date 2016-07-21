@@ -15,7 +15,7 @@
             <p:messages autoUpdate="true" />
             <br/>
             <p:focus context="pnl" />
-            <p:panel id="pnl">
+            <p:panel id="pnl" styleClass="bacground-panel">
                 <p:toolbar>
                     <f:facet name="left">
                         <p:commandButton type="button" value="Consultar Produto" 
@@ -30,14 +30,19 @@
                 </p:toolbar>
                 <br/>
                 <p:panelGrid columns="2">
+                    <p:outputLabel value="Nome do Produto: *" />
                     <p:inputText placeholder="Nome do Produto" value="#{produtoBean.produto.nome}"
-                                 required="true" requiredMessage="Campo Produto Obrigatório"/>
+                                 required="true" requiredMessage="Campo Produto Obrigatório" size="40"/>
+                    <p:outputLabel value="Cod. de Barra: *" />
                     <p:inputText placeholder="Código de Barra" value="#{produtoBean.produto.codigoBarra}"
-                                 required="true" requiredMessage="Campo Cod de Barra Obrigatório"/>
+                                 required="true" requiredMessage="Campo Cod de Barra Obrigatório" size="40"/>
+                    <p:outputLabel value="Valor Unitário: *" />
                     <p:inputText placeholder="Valor Unitário" value="#{produtoBean.produto.valorUnitario}"
                                  required="true" requiredMessage="Campo Valor Unitário Obrigatório"/>
+                    <p:outputLabel value="Qtdd em Estoque: *" />
                     <p:inputText placeholder="Qtdd em Estoque" value="#{produtoBean.produto.estoque}"
                                  required="true" requiredMessage="Campo Estoque Obrigatório"/>
+                    <p:outputLabel value="Categoria: *" />
                     <p:selectOneMenu value="#{produtoBean.produto.categoria}" >
                         <f:selectItem itemLabel="Categoria" noSelectionOption="true"/>
                         <f:selectItems value="#{produtoBean.categorias}" var="categoria"

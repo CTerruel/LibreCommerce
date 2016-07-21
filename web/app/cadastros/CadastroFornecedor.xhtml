@@ -15,7 +15,7 @@
             <p:messages autoUpdate="true" />
             <br/>
             <p:focus context="pnl" />
-            <p:panel id="pnl">
+            <p:panel id="pnl" styleClass="bacground-panel">
                 <p:toolbar>
                     <f:facet name="left">
                         <p:commandButton type="button" value="Consultar Fornecedor"
@@ -30,8 +30,11 @@
                 </p:toolbar>
                 <br/>
                 <p:panelGrid columns="2">
+                    <p:outputLabel value="Nome do Fornecedor: *" />
                     <p:inputText placeholder="Fornecedor" size="40" value="#{fornecedorBean.fornecedor.nome}" />
+                    <p:outputLabel value="Endereço: " />
                     <p:inputText placeholder="Endereço" size="40" value="#{fornecedorBean.fornecedor.endereco}" />
+                    <p:outputLabel value="Estado: " />
                     <p:selectOneMenu value="#{fornecedorBean.estado}" >
                         <f:selectItem itemLabel="Estado" noSelectionOption="true" />
                         <f:selectItems value="#{fornecedorBean.estados}" var="estado"
@@ -39,13 +42,16 @@
                         <f:ajax render="combo-cidade" event="change"
                                 listener="#{fornecedorBean.getCidadesDoEstado(event)}" />
                     </p:selectOneMenu>
+                    <p:outputLabel value="Cidade: " />
                     <p:selectOneMenu id="combo-cidade" value="#{fornecedorBean.fornecedor.cidade}" >
                         <f:selectItem itemLabel="Cidade" noSelectionOption="true" />
                         <f:selectItems value="#{fornecedorBean.cidades}" var="cidade"
                                        itemLabel="#{cidade.nome}" itemValue="#{cidade}"/>
                     </p:selectOneMenu>
+                    <p:outputLabel value="CNPJ: " />
                     <p:inputMask placeholder="CNPJ" size="30" mask="99.999.999/9999-99"
                                  value="#{fornecedorBean.fornecedor.cnpj}"/>
+                    <p:outputLabel value="Insc. Estadual: " />
                     <p:inputMask placeholder="Insc. Estadual" size="30" mask="999.999.999.999"
                                  value="#{fornecedorBean.fornecedor.inscEstadual}"/>
                 </p:panelGrid>

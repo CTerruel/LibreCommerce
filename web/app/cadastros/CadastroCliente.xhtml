@@ -15,7 +15,7 @@
             <p:messages autoUpdate="true" />
             <br/>
             <p:focus context="pnl" />
-            <p:panel id="pnl">
+            <p:panel id="pnl" styleClass="bacground-panel">
                 <p:toolbar>
                     <f:facet name="left">
                         <p:commandButton value="Consultar Cliente" type="button"
@@ -32,34 +32,33 @@
                 <h:outputText value="Os campos marcados com * são obrigatórios!"
                               style="color: red"/>
                 <p:panelGrid columns="2" id="cadFuncionario">
-                    <p:column>
-                        <p:inputText placeholder="Nome:" style="width: 400px"
-                                     value="#{clienteBean.cliente.nome}"
-                                     required="true" requiredMessage="Campo Nome Obrigatório!"/> *
-                    </p:column>
+                    <p:outputLabel value="Nome do Cliente: *" />
+                    <p:inputText placeholder="Nome:" style="width: 400px"
+                                 value="#{clienteBean.cliente.nome}"
+                                 required="true" requiredMessage="Campo Nome Obrigatório!"/>
+                    <p:outputLabel value="Endereço: " />
                     <p:inputText placeholder="Endereço:" style="width: 400px"
                                  value="#{clienteBean.cliente.endereco}"/>
+                    <p:outputLabel value="Data de Nascimento: " />
                     <p:calendar placeholder="Data Nascimento:" navigator="true"
                                 value="#{clienteBean.cliente.dataNascimento}"
                                 locale="pt_BR" yearRange="c-100:c+10" />
+                    <p:outputLabel value="CPF/CNPJ: " />
                     <p:inputText placeholder="CPF/CNPJ" value="#{clienteBean.cliente.cpfCnpj}" />
-                    <p:column>
-                        <p:selectOneMenu value="#{clienteBean.estado}"  >
-                            <f:selectItem itemLabel="Estado" noSelectionOption="true"/>
-                            <f:selectItems value="#{clienteBean.estados}" var="estado"
-                                           itemLabel="#{estado.nome}" itemValue="#{estado}"/>
-                            <f:ajax render="combo-cidade" event="change"
-                                    listener="#{clienteBean.buscaCidadesDoEstado()}"/>
-                        </p:selectOneMenu> *
-                    </p:column>
-
-                    <p:column>
-                        <p:selectOneMenu id="combo-cidade" value="#{clienteBean.cliente.cidade}" >
-                            <f:selectItem itemLabel="Cidade" noSelectionOption="true"/>
-                            <f:selectItems value="#{clienteBean.cidades}" var="cidade"
-                                           itemLabel="#{cidade.nome}" itemValue="#{cidade}"/>
-                        </p:selectOneMenu> *
-                    </p:column>
+                    <p:outputLabel value="Estado: *" />
+                    <p:selectOneMenu value="#{clienteBean.estado}"  >
+                        <f:selectItem itemLabel="Estado" noSelectionOption="true"/>
+                        <f:selectItems value="#{clienteBean.estados}" var="estado"
+                                       itemLabel="#{estado.nome}" itemValue="#{estado}"/>
+                        <f:ajax render="combo-cidade" event="change"
+                                listener="#{clienteBean.buscaCidadesDoEstado()}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Cidade: *" />
+                    <p:selectOneMenu id="combo-cidade" value="#{clienteBean.cliente.cidade}" >
+                        <f:selectItem itemLabel="Cidade" noSelectionOption="true"/>
+                        <f:selectItems value="#{clienteBean.cidades}" var="cidade"
+                                       itemLabel="#{cidade.nome}" itemValue="#{cidade}"/>
+                    </p:selectOneMenu>
                 </p:panelGrid>
             </p:panel>
             <p:ajaxStatus onstart="PF('statusDialog').show();"
