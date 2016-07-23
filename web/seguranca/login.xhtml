@@ -5,13 +5,24 @@
       xmlns:p="http://primefaces.org/ui">
     <h:head>
         <title>Libre Commerce - Login</title>
+        
+        <!--Estilo para Panel Login-->
+        <style>
+            body { background-color: #cccccc; }
+            .background-panel { 
+                width: 380px; 
+                margin-left: 35%; 
+                margin-top: 10%;
+                background-color: #eeeeee;
+            }
+        </style>
+        
     </h:head>
     <h:body>
 
         <h:form>
             <p:focus context="pnl" />
-            <p:panel id="pnl" header="Controle de Acesso" style="width: 420px; 
-                     margin-left: 35%; margin-top: 10%">
+            <p:panel id="pnl" header="Controle de Acesso" styleClass="background-panel">
                 <p:panelGrid columns="2">
                     <p:outputLabel value="Usuário:"/>
                     <p:inputText value="#{autenticacaoBean.funcionario.login}" />

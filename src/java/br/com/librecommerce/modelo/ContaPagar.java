@@ -43,7 +43,7 @@ public class ContaPagar implements Serializable {
         this.id = id;
     }
 
-    @Column(length = 30)
+    @Column(length = 100)
     public String getDescricao() {
         return descricao;
     }
@@ -61,7 +61,7 @@ public class ContaPagar implements Serializable {
         this.dataVencimento = dataVencimento;
     }
 
-    @Column(precision = 5, scale = 2, nullable = false)
+    @Column(precision = 5, scale = 2)
     public Double getValor() {
         return valor;
     }

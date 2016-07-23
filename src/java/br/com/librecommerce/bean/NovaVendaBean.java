@@ -104,7 +104,7 @@ public class NovaVendaBean {
 
         return "NovaVenda";
     }
-    
+   
     public String cancelarVendaPasso1() {
         clearVenda();
         return "NovaVenda";

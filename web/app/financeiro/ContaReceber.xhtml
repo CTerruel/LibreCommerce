@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+    template="/WEB-INF/template/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <ui:define name="titulo">Contas a Receber</ui:define>
+    
+    <ui:define name="conteudo">
+        <h:form>
+            <br/>
+            <p:messages autoUpdate="true" /> 
+            <p:panel>
+                <h:panelGrid columns="4">
+                    <h:outputLabel value="Nome do Cliente" />
+                    <p:inputText placeholder="Nome do Cliente" size="35" value="#{contaReceberBean.nomeCliente}" />
+                    <p:commandButton value="Consultar" action="#{contaReceberBean.consultarPorCliente()}"
+                                     update="@form"/>
+                    <p:commandButton value="Consultar Todas" action="#{contaReceberBean.consultarTodas()}"
+                                     update="@form"/>
+                    <p:commandButton value="Receber Todas" action="#{contaReceberBean.receberTodas()}" />
+                </h:panelGrid>
+                <br/>
+                <p:dataTable value="#{contaReceberBean.contasReceber}" var="contaReceber" >
+                    <p:column headerText="Cliente" style="text-align: left" >
+                        <h:outputText value="#{contaReceber.venda.cliente.nome}" />
+                    </p:column>
+                    <p:column headerText="Data de Vencimento" style="text-align: right">
+                        <h:outputText value="#{contaReceber.dataVencimento}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Valor" style="text-align: right" >
+                        <h:outputText value="R$ #{contaReceber.venda.totalVenda}" />
+                    </p:column>
+                    <p:column headerText="Status" style="text-align: left">
+                        <h:outputText value="#{contaReceber.statusConta}" />
+                    </p:column>
+                    <p:column headerText="Opções" >
+                        <p:commandLink style="color: blue" value="Receber" 
+                                       action="#{contaReceberBean.receber(contaReceber)}"
+                                       update="@form"/>
+                    </p:column>
+                    <p:columnGroup type="footer">
+                        <p:row>
+                            <p:column colspan="4" footerText="Total R$:" 
+                                      style="text-align: right; font-size: xx-large" />
+                            <p:column footerText="#{contaReceberBean.totalReceber}" 
+                                      style="text-align: right; font-size: xx-large"/>
+                        </p:row>
+                    </p:columnGroup>
+                </p:dataTable>
+            </p:panel>
+            <p:ajaxStatus onstart="PF('statusDialog').show();"
+                          onsuccess="PF('statusDialog').hide();"/>
+            <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
+                      showHeader="false" closable="false" draggable="false">
+                <p:graphicImage library="images" name="carregando.gif" />
+            </p:dialog>
+        </h:form>
+    </ui:define>
+    
+</ui:composition>
+

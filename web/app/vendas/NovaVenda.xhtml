@@ -17,11 +17,11 @@
             <p:focus context="panel" />
             <p:panel id="panel">
                 <h:panelGrid columns="5">
-                    <p:outputLabel value="Quantidade: " />
-                    <p:inputText value="#{novaVendaBean.itemVenda.quantidadeProduto}" size="8" />
                     <p:outputLabel value="Código de Barras: " />
                     <p:inputText value="#{novaVendaBean.produto.codigoBarra}" 
                                  required="true" requiredMessage="O código de barra é obrigatório!"/>
+                    <p:outputLabel value="Quantidade: " />
+                    <p:inputText value="#{novaVendaBean.itemVenda.quantidadeProduto}" size="8" />
                     <p:commandButton value="Adicionar" action="#{novaVendaBean.adicionar()}" update="@form"/>
                 </h:panelGrid>
                 <br/>

@@ -5,9 +5,13 @@
  */
 package br.com.librecommerce.dao;
 
+import br.com.librecommerce.modelo.ContaReceber;
 import br.com.librecommerce.modelo.ItemVenda;
+import br.com.librecommerce.modelo.StatusConta;
 import br.com.librecommerce.modelo.Venda;
 import br.com.librecommerce.util.EntityManagerUtil;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -25,6 +29,11 @@ public class VendaDao {
         
         atualizarEstoque(venda.getItensVenda(), em);
         
+        // Se a venda possui um cliente gera uma conta a receber
+        if (venda.getCliente() != null) {
+            gerarContaReceber(venda, em);
+        }
+        
         em.getTransaction().commit();
         
         em.close();
@@ -37,6 +46,23 @@ public class VendaDao {
             System.out.println(itensVenda.get(i).getProduto());
             pDao.atualizarEstoque(itensVenda.get(i).getProduto(), em);
         }
+    }
+
+    private void gerarContaReceber(Venda venda, EntityManager em) {
+        ContaReceber contaReceber = new ContaReceber();
+        contaReceber.setVenda(venda);
+        // Calcular data de vencimento pex: mes seguinte
+        contaReceber.setDataVencimento(gerarDataVencimento(new Date()));
+        contaReceber.setStatusConta(StatusConta.ABERTA);
+        new ContaReceberDao().gerarContaReceber(contaReceber, em);
+    }
+
+    private Date gerarDataVencimento(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.MONTH, c.get(Calendar.MONTH)+1);
+        return c.getTime();
     }
 
 }

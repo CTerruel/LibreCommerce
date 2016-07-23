@@ -15,7 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -30,11 +30,9 @@ public class ContaReceber implements Serializable {
     private static final long serialVersionUID = 1l;
     
     private int id;
-    private Date dataCompra;
+    private Venda venda;
     private Date dataVencimento;
-    private Double valorCompra;
     private StatusConta statusConta;
-    private Cliente cliente;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,13 +44,14 @@ public class ContaReceber implements Serializable {
         this.id = id;
     }
 
-    @Temporal(TemporalType.DATE)
-    public Date getDataCompra() {
-        return dataCompra;
+    @OneToOne
+    @JoinColumn(name = "idVenda")
+    public Venda getVenda() {
+        return venda;
     }
 
-    public void setDataCompra(Date dataCompra) {
-        this.dataCompra = dataCompra;
+    public void setVenda(Venda venda) {
+        this.venda = venda;
     }
 
     @Temporal(TemporalType.DATE)
@@ -64,15 +63,6 @@ public class ContaReceber implements Serializable {
         this.dataVencimento = dataVencimento;
     }
 
-    @Column(precision = 5, scale = 2, nullable = false)
-    public Double getValorCompra() {
-        return valorCompra;
-    }
-
-    public void setValorCompra(Double valorCompra) {
-        this.valorCompra = valorCompra;
-    }
-
     @Enumerated(EnumType.STRING)
     public StatusConta getStatusConta() {
         return statusConta;
@@ -81,17 +71,5 @@ public class ContaReceber implements Serializable {
     public void setStatusConta(StatusConta statusConta) {
         this.statusConta = statusConta;
     }
-
-    
-    @ManyToOne
-    @JoinColumn(name = "idCliente", referencedColumnName = "id")
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-    
     
 }
