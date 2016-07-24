@@ -5,22 +5,26 @@
  */
 package br.com.librecommerce.bean;
 
+import br.com.librecommerce.dao.CaixaDao;
 import br.com.librecommerce.dao.ClienteDao;
+import br.com.librecommerce.dao.ContaReceberDao;
 import br.com.librecommerce.dao.ProdutoDao;
 import br.com.librecommerce.dao.VendaDao;
 import br.com.librecommerce.modelo.Caixa;
 import br.com.librecommerce.modelo.Cliente;
+import br.com.librecommerce.modelo.ContaReceber;
 import br.com.librecommerce.modelo.FormaPagamento;
 import br.com.librecommerce.modelo.ItemVenda;
 import br.com.librecommerce.modelo.Produto;
+import br.com.librecommerce.modelo.StatusConta;
 import br.com.librecommerce.modelo.Venda;
 import br.com.librecommerce.util.FacesUtil;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import javax.persistence.NoResultException;
 
 /**
@@ -35,7 +39,6 @@ public class NovaVendaBean {
     private Venda venda;
     private Produto produto;
     private ItemVenda itemVenda;
-    private Caixa caixa;
     private String buscaNomeCliente = "";
     private String nomeCliente = "";
     private int numeroItem = 1;
@@ -50,7 +53,6 @@ public class NovaVendaBean {
         itemVenda = new ItemVenda();
         cliente = new Cliente();
         produto = new Produto();
-        caixa = (Caixa) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("caixa");
     }
 
     public String adicionar() {
@@ -88,34 +90,102 @@ public class NovaVendaBean {
 
     public String salvar() {
         try {
-            venda.setCaixa(caixa);
+            venda.setCaixa(getCaixaAberto());
             venda.setDataVenda(new Date());
-            
-            new VendaDao().salvar(venda);
-            
+
+            VendaDao vendaDao = new VendaDao();
+
+            if (venda.getCliente() == null) {
+                vendaDao.salvar(venda);
+                atualizarCaixa(venda.getFormaPagamento(), venda.getTotalVenda());
+            } else {
+                venda.setValorPago(0.0);
+                vendaDao.salvar(venda);
+                atualizarCaixa(venda.getFormaPagamento(), venda.getTotalVenda());
+                gerarContaReceber(venda);
+            }
+
             numeroItem = 1;
+            nomeCliente = "";
             venda = new Venda();
             cliente = new Cliente();
-            
+
             FacesUtil.showInfoMessage("Venda salva com sucesso!", null);
         } catch (Exception ex) {
+            ex.printStackTrace();
             FacesUtil.showErrorMessage(ex.getMessage(), null);
         }
 
         return "NovaVenda";
     }
-   
+
+    private void gerarContaReceber(Venda venda) {
+        try {
+            ContaReceber contaReceber = new ContaReceber();
+            contaReceber.setVenda(venda);
+            // Calcular data de vencimento pex: mes seguinte
+            contaReceber.setDataVencimento(gerarDataVencimento(new Date()));
+            contaReceber.setStatusConta(StatusConta.ABERTA);
+            new ContaReceberDao().gerarContaReceber(contaReceber);
+        } catch (Exception e) {
+            FacesUtil.showErrorMessage(e.getMessage(), null);
+        }
+    }
+
+    private Date gerarDataVencimento(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.DAY_OF_MONTH, 1);
+        c.set(Calendar.MONTH, c.get(Calendar.MONTH) + 1);
+        return c.getTime();
+    }
+
+    private void atualizarCaixa(FormaPagamento formaPagamento, Double totalVenda) {
+        Caixa caixa = getCaixaAberto();
+        if (caixa != null) {
+            switch (formaPagamento) {
+                case DINHEIRO:
+                    caixa.setTotalDinheiro(caixa.getTotalDinheiro() + totalVenda);
+                    break;
+                case CARTAO_DEBITO:
+                    caixa.setTotalCartaoDebito(caixa.getTotalCartaoDebito() + totalVenda);
+                    break;
+                case CARTAO_CREDITO:
+                    caixa.setTotalCartaoCredito(caixa.getTotalCartaoCredito() + totalVenda);
+                    break;
+                case PRAZO_30_DIAS:
+                    caixa.setTotalPrazo30Dias(caixa.getTotalPrazo30Dias() + totalVenda);
+                    break;
+            }
+            caixa.setTotalVendas(caixa.getTotalVendas() + totalVenda);
+            try {
+                new CaixaDao().atualizarCaixa(caixa);
+            } catch (Exception ex) {
+                FacesUtil.showErrorMessage(ex.getMessage(), null);
+            }
+        }
+    }
+
+    private Caixa getCaixaAberto() {
+        try {
+            return new CaixaDao().getCaixaAberto();
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+            return null;
+        }
+    }
+
     public String cancelarVendaPasso1() {
         clearVenda();
         return "NovaVenda";
     }
-    
+
     public String cancelarVendaPasso2() {
         clearVenda();
         this.nomeCliente = "";
         return "NovaVenda";
     }
-    
+
     private void clearVenda() {
         venda.getItensVenda().clear();
         venda.setTotalVenda(0.0);

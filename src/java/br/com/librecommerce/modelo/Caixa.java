@@ -37,6 +37,11 @@ public class Caixa implements Serializable {
     private Date dataAbertura;
     private Date dataFechamento;
     private Double valorAbertura;
+    private Double totalVendas;
+    private Double totalDinheiro;
+    private Double totalCartaoDebito;
+    private Double totalCartaoCredito;
+    private Double totalPrazo30Dias;
     private Double valorFechamento;
     private StatusCaixa statusCaixa;
     private List<Venda> vendas;
@@ -57,6 +62,7 @@ public class Caixa implements Serializable {
     }
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "DATA_ABERTURA")
     public Date getDataAbertura() {
         return dataAbertura;
     }
@@ -66,6 +72,7 @@ public class Caixa implements Serializable {
     }
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "DATA_FECHAMENTO")
     public Date getDataFechamento() {
         return dataFechamento;
     }
@@ -74,7 +81,7 @@ public class Caixa implements Serializable {
         this.dataFechamento = dataFechamento;
     }
 
-    @Column(scale = 2)
+    @Column(scale = 2, name = "VALOR_ABERTURA")
     public Double getValorAbertura() {
         return valorAbertura;
     }
@@ -82,8 +89,58 @@ public class Caixa implements Serializable {
     public void setValorAbertura(Double valorAbertura) {
         this.valorAbertura = valorAbertura;
     }
+    
+    @Column(scale = 2, name = "TOTAL_VENDAS")
+    public Double getTotalVendas() {
+        if (totalVendas == null) totalVendas = 0.0;
+        return totalVendas;
+    }
 
-    @Column(scale = 2)
+    public void setTotalVendas(Double totalVendas) {
+        this.totalVendas = totalVendas;
+    }
+
+    @Column(scale = 2, name = "TOTAL_DINHEIRO")
+    public Double getTotalDinheiro() {
+        if (totalDinheiro == null) totalDinheiro = 0.0;
+        return totalDinheiro;
+    }
+
+    public void setTotalDinheiro(Double totalDinheiro) {
+        this.totalDinheiro = totalDinheiro;
+    }
+
+    @Column(scale = 2, name = "TOTAL_CARTAO_DEBITO")
+    public Double getTotalCartaoDebito() {
+        if (totalCartaoDebito == null) totalCartaoDebito = 0.0;
+        return totalCartaoDebito;
+    }
+
+    public void setTotalCartaoDebito(Double totalCartaoDebito) {
+        this.totalCartaoDebito = totalCartaoDebito;
+    }
+
+    @Column(scale = 2, name = "TOTAL_CARTAO_CREDITO")
+    public Double getTotalCartaoCredito() {
+        if (totalCartaoCredito == null) totalCartaoCredito = 0.0;
+        return totalCartaoCredito;
+    }
+
+    public void setTotalCartaoCredito(Double totalCartaoCredito) {
+        this.totalCartaoCredito = totalCartaoCredito;
+    }
+
+    @Column(scale = 2, name = "TOTAL_PRAZO_30_DIAS")
+    public Double getTotalPrazo30Dias() {
+        if (totalPrazo30Dias == null) totalPrazo30Dias = 0.0;
+        return totalPrazo30Dias;
+    }
+
+    public void setTotalPrazo30Dias(Double totalPrazo30Dias) {
+        this.totalPrazo30Dias = totalPrazo30Dias;
+    }
+
+    @Column(scale = 2, name = "VALOR_FECHAMENTO")
     public Double getValorFechamento() {
         return valorFechamento;
     }
@@ -93,7 +150,7 @@ public class Caixa implements Serializable {
     }
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 15)
+    @Column(length = 15, name = "STATUS_CAIXA")
     public StatusCaixa getStatusCaixa() {
         return statusCaixa;
     }

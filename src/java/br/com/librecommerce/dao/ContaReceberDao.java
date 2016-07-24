@@ -18,24 +18,27 @@ import javax.persistence.NoResultException;
  */
 public class ContaReceberDao {
 
-    protected void gerarContaReceber(ContaReceber contaReceber, EntityManager em) {
-        try {
-            em.persist(contaReceber);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void gerarContaReceber(ContaReceber contaReceber) throws Exception {
+        EntityManager em = EntityManagerUtil.getInstance();
+        
+        em.getTransaction().begin();
+        em.persist(contaReceber);
+        em.getTransaction().commit();
+        
+        em.close();
+
     }
 
     public List<ContaReceber> consultarTodas() throws NoResultException, Exception {
         EntityManager em = EntityManagerUtil.getInstance();
         List<ContaReceber> contasReceber = null;
-        
+
         contasReceber = em.createQuery("SELECT  cc FROM ContaReceber cc WHERE cc.statusConta = :statusConta")
                 .setParameter("statusConta", StatusConta.ABERTA)
                 .getResultList();
-        
+
         em.close();
-        
+
         return contasReceber;
     }
 
@@ -65,19 +68,19 @@ public class ContaReceberDao {
 
         em.close();
     }
-    
+
     public void receberTodas(List<ContaReceber> contasReceber) throws Exception {
         EntityManager em = EntityManagerUtil.getInstance();
-        
+
         em.getTransaction().begin();
-        
+
         for (int i = 0; i < contasReceber.size(); i++) {
             em.merge(contasReceber.get(i));
         }
-        
+
         em.getTransaction().commit();
-        
+
         em.close();
     }
-    
+
 }

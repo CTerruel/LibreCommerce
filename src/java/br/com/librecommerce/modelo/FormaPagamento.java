@@ -13,7 +13,8 @@ public enum FormaPagamento {
     
     DINHEIRO("Dinheiro"),
     CARTAO_DEBITO("Cartão de Débito"),
-    CARTAO_CREDITO("Cartão de Crédito");
+    CARTAO_CREDITO("Cartão de Crédito"),
+    PRAZO_30_DIAS("Prazo 30 dias");
     
     private String label;
 

@@ -17,55 +17,53 @@ import javax.persistence.NoResultException;
  */
 public class CaixaDao {
 
-    public Caixa abrirCaixa(Caixa caixa) {
+    public Caixa abrirCaixa(Caixa caixa) throws Exception {
         // persiste o caixa recém aberto
         EntityManager em = EntityManagerUtil.getInstance();
-        try {
-            em.getTransaction().begin();
-            em.persist(caixa);
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            e.printStackTrace();;
-        } finally {
-            em.close();
-        }
 
-        //busca o caixa recém aberto
+        em.getTransaction().begin();
+        em.persist(caixa);
+        em.getTransaction().commit();
+
+        em.close();
+
         return getCaixaAberto();
 
     }
 
-    public Caixa getCaixaAberto() {
+    public Caixa getCaixaAberto() throws Exception {
         EntityManager em = EntityManagerUtil.getInstance();
         Caixa caixa = null;
-        try {
-            caixa = (Caixa) em.createQuery("SELECT c FROM Caixa c WHERE c.statusCaixa = :statusCaixa")
-                    .setParameter("statusCaixa", StatusCaixa.ABERTO)
-                    .getSingleResult();
-        }
-        catch (NoResultException ne) {
-            System.out.println(ne.getMessage());
-        }
-        finally {
-            em.close();
-        }
+
+        caixa = (Caixa) em.createQuery("SELECT c FROM Caixa c WHERE c.statusCaixa = :statusCaixa")
+                .setParameter("statusCaixa", StatusCaixa.ABERTO)
+                .getSingleResult();
+
+        em.close();
 
         return caixa;
     }
-    
-    public void fecharCaixa(Caixa c) {
+
+    public void atualizarCaixa(Caixa caixa) throws Exception {
         EntityManager em = EntityManagerUtil.getInstance();
-        try {
-            em.getTransaction().begin();
-            em.merge(c);
-            em.getTransaction().commit();
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        finally {
-            em.close();
-        }
+
+        em.getTransaction().begin();
+        em.merge(caixa);
+        em.getTransaction().commit();
+
+        em.close();
+
+    }
+
+    public void fecharCaixa(Caixa c) throws Exception {
+        EntityManager em = EntityManagerUtil.getInstance();
+        
+        em.getTransaction().begin();
+        em.merge(c);
+        em.getTransaction().commit();
+        
+        em.close();
+        
     }
 
 }

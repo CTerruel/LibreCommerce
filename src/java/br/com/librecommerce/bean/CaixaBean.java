@@ -30,13 +30,22 @@ public class CaixaBean {
      * Creates a new instance of CaixaBean
      */
     public CaixaBean() {
-        this.caixa = new CaixaDao().getCaixaAberto();
+        this.caixa = getCaixaAberto();
         if (this.caixa != null) {
             adicionaCaixaNaSessao(caixa);
         } else {
             this.caixa = new Caixa();
         }
 
+    }
+
+    private Caixa getCaixaAberto() {
+        try {
+            return new CaixaDao().getCaixaAberto();
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+            return null;
+        }
     }
 
     public String prepararAbrirCaixa() {
@@ -50,14 +59,20 @@ public class CaixaBean {
     }
 
     public String abrirCaixa() {
-        caixa.setDataAbertura(new Date());
-        caixa.setFuncionario(
-                (Funcionario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("login"));
-        caixa.setStatusCaixa(StatusCaixa.ABERTO);
-        caixa = new CaixaDao().abrirCaixa(caixa);
-        adicionaCaixaNaSessao(caixa);
-        FacesUtil.showInfoMessage("Caixa aberto e pronto para vendas!", null);
-        return "GerenciarCaixa";
+        try {
+            caixa.setDataAbertura(new Date());
+            caixa.setFuncionario(
+                    (Funcionario) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("login"));
+            caixa.setStatusCaixa(StatusCaixa.ABERTO);
+            caixa = new CaixaDao().abrirCaixa(caixa);
+            adicionaCaixaNaSessao(caixa);
+            FacesUtil.showInfoMessage("Caixa aberto e pronto para vendas!", null);
+            return "GerenciarCaixa";
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+            return "GerenciarCaixa";
+        }
+
     }
 
     private void adicionaCaixaNaSessao(Caixa caixa) {
@@ -74,12 +89,17 @@ public class CaixaBean {
     }
 
     public String fecharCaixa() {
-        caixa.setDataFechamento(new Date());
-        caixa.setStatusCaixa(StatusCaixa.FECHADO);
-        new CaixaDao().fecharCaixa(caixa);
-        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("caixa");
-        FacesUtil.showInfoMessage("Caixa fechado com sucesso!", null);
-        return "GerenciarCaixa";
+        try {
+            caixa.setDataFechamento(new Date());
+            caixa.setStatusCaixa(StatusCaixa.FECHADO);
+            new CaixaDao().fecharCaixa(caixa);
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().remove("caixa");
+            FacesUtil.showInfoMessage("Caixa fechado com sucesso!", null);
+            return "GerenciarCaixa";
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+            return "GerenciarCaixa";
+        }
 
     }
 
@@ -87,8 +107,7 @@ public class CaixaBean {
         if (caixa.getStatusCaixa() == null || caixa.getStatusCaixa() == StatusCaixa.FECHADO) {
             FacesUtil.showAlertMessage("É preciso abrir o caixa antes de efetuar vendas!", null);
             return "GerenciarCaixa";
-        }
-        else {
+        } else {
             return "NovaVenda?faces-redirect=true";
         }
     }

@@ -10,8 +10,6 @@ import br.com.librecommerce.modelo.ContaReceber;
 import br.com.librecommerce.modelo.StatusConta;
 import br.com.librecommerce.util.FacesUtil;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.persistence.NoResultException;
@@ -47,7 +45,6 @@ public class ContaReceberBean {
         catch (Exception ex) {
             FacesUtil.showErrorMessage(ex.getMessage(), null);
         }
-
         return "ContaReceber";
     }
 
@@ -60,13 +57,13 @@ public class ContaReceberBean {
         }
         catch (NoResultException ne) {
             FacesUtil.showInfoMessage("Nenhuma conta a receber!", null);
+            return "ContaReceber";
         }
         catch (Exception e) {
             FacesUtil.showErrorMessage(e.getMessage(), null);
-            return null;
+            return "ContaReceber";
         }
         
-        return "ContaReceber";
     }
 
     private void geraTotalReceber(List<ContaReceber> contasReceber) {
@@ -80,20 +77,24 @@ public class ContaReceberBean {
             contaReceber.setStatusConta(StatusConta.FECHADA);
             new ContaReceberDao().receber(contaReceber);
             FacesUtil.showInfoMessage("Conta Recebida!", null);
-        } catch (Exception e) {
+            return consultarTodas();
+        } 
+        catch (Exception e) {
             FacesUtil.showErrorMessage(e.getMessage(), null);
+            return consultarTodas();
         }
-        return "ContaReceber";
     }
     
     public String receberTodas() {
         try {
             new ContaReceberDao().receberTodas(contasReceber);
+            FacesUtil.showInfoMessage("Contas Recebidas!", null);
+            return consultarTodas();
         } 
         catch (Exception e) {
-            FacesUtil.showErrorMessage("OPS! Um erro ocorreu a receber as contas!", null);
+            FacesUtil.showErrorMessage("OPS! Um erro ocorreu ao receber as contas!\n" + e.getMessage(), null);
+            return consultarTodas();
         }
-        return "ContaReceber";
     }
 
     public String getNomeCliente() {
