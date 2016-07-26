@@ -12,9 +12,9 @@
 
     <ui:define name="conteudo">
         <h:form>
-            <br/>
             <p:messages autoUpdate="true" />
             <p:focus context="pnl" />
+            <br/>
             <p:panel id="pnl" styleClass="background-panel">
                 <p:toolbar>
                     <f:facet name="left">
@@ -37,6 +37,14 @@
                     <p:inputText value="#{contaPagarBean.contaPagar.valor}" />
                 </p:panelGrid>
             </p:panel>
+            <p:ajaxStatus onstart="PF('statusDialog').show();"
+                          onsuccess="PF('statusDialog').hide();"/>
+            <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
+                      showHeader="false" closable="false" draggable="false">
+                <p:graphicImage library="images" name="carregando.gif" />
+            </p:dialog>
+        </h:form>
+        <h:form id="pesquisaFrm">
             <p:dialog widgetVar="pesquisarConta" modal="true" width="900" height="400"
                       resizable="false" header="Pesquisar Contas a Pagar" >
                 <h:panelGrid columns="2">
@@ -64,13 +72,8 @@
                     </p:column>
                 </p:dataTable>
             </p:dialog>
-            <p:ajaxStatus onstart="PF('statusDialog').show();"
-                          onsuccess="PF('statusDialog').hide();"/>
-            <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
-                      showHeader="false" closable="false" draggable="false">
-                <p:graphicImage library="images" name="carregando.gif" />
-            </p:dialog>
         </h:form>
     </ui:define>
 
 </ui:composition>
+

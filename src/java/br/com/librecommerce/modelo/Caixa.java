@@ -67,6 +67,7 @@ public class Caixa implements Serializable {
 
     @Column(name = "CONTAS_RECEBIDAS", scale = 2)
     public Double getContasRecebidas() {
+        if (this.contasRecebidas == null) this.contasRecebidas = 0.0;
         return contasRecebidas;
     }
 
@@ -76,6 +77,7 @@ public class Caixa implements Serializable {
 
     @Column(name = "CONTAS_PAGAS", scale = 2)
     public Double getContasPagas() {
+        if (this.contasPagas == null) this.contasPagas = 0.0;
         return contasPagas;
     }
 
@@ -85,6 +87,7 @@ public class Caixa implements Serializable {
 
     @Column(scale = 2)
     public Double getSangria() {
+        if (this.sangria == null) this.sangria = 0.0;
         return sangria;
     }
 
@@ -114,6 +117,7 @@ public class Caixa implements Serializable {
 
     @Column(scale = 2, name = "VALOR_ABERTURA")
     public Double getValorAbertura() {
+        if (this.valorAbertura == null) this.valorAbertura = 0.0;
         return valorAbertura;
     }
 
@@ -173,6 +177,7 @@ public class Caixa implements Serializable {
 
     @Column(scale = 2, name = "VALOR_FECHAMENTO")
     public Double getValorFechamento() {
+        if (this.valorFechamento == null) this.valorFechamento = 0.0;
         return valorFechamento;
     }
 

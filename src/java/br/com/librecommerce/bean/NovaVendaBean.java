@@ -154,6 +154,7 @@ public class NovaVendaBean {
                     break;
                 case PRAZO_30_DIAS:
                     caixa.setTotalPrazo30Dias(caixa.getTotalPrazo30Dias() + totalVenda);
+                    //caixa.setTotalVendas(caixa.getTotalVendas() + totalVenda);
                     break;
             }
 

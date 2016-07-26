@@ -48,9 +48,9 @@ public class ContaReceberDao {
 
         contasReceber
                 = em.createQuery("SELECT cc FROM ContaReceber cc "
-                        + "WHERE cc.venda.cliente.nome LIKE :nomeCliente "
+                        + "WHERE cc.venda.cliente.nome = :nomeCliente "
                         + "AND cc.statusConta = :statusConta")
-                .setParameter("nomeCliente", "%" + nomeCliente + "%")
+                .setParameter("nomeCliente", nomeCliente)
                 .setParameter("statusConta", StatusConta.ABERTA)
                 .getResultList();
 
