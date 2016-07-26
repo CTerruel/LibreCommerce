@@ -59,7 +59,8 @@
                         <h:outputText value="R$ #{contaPagar.valor}" />
                     </p:column>
                     <p:column headerText="Opções" style="width: 150px;">
-                        <p:commandLink value="Pagar" />
+                        <p:commandLink value="Pagar" action="#{contaPagarBean.pagarConta(contaPagar)}"
+                                       update="dtContasPagar"/>
                     </p:column>
                 </p:dataTable>
             </p:dialog>

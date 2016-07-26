@@ -6,6 +6,7 @@
 package br.com.librecommerce.dao;
 
 import br.com.librecommerce.modelo.ContaPagar;
+import br.com.librecommerce.modelo.StatusConta;
 import br.com.librecommerce.util.EntityManagerUtil;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -56,7 +57,8 @@ public class ContaPagarDao {
         EntityManager em = EntityManagerUtil.getInstance();
         List<ContaPagar> contasPagar = null;
 
-        contasPagar = em.createQuery("FROM ContaPagar cp")
+        contasPagar = em.createQuery("SELECT cp FROM ContaPagar cp WHERE cp.statusConta = :statusConta")
+                .setParameter("statusConta", StatusConta.ABERTA)
                 .getResultList();
 
         em.close();
@@ -68,8 +70,10 @@ public class ContaPagarDao {
         EntityManager em = EntityManagerUtil.getInstance();
         List<ContaPagar> contasPagar = null;
 
-        contasPagar = em.createQuery("SELECT cp FROM ContaPagar cp WHERE cp.descricao LIKE :descricao")
+        contasPagar = em.createQuery("SELECT cp FROM ContaPagar cp "
+                + "WHERE cp.descricao LIKE :descricao AND cp.statusConta = :statusConta")
                 .setParameter("descricao", "%" + descricao + "%")
+                .setParameter("statusConta", StatusConta.ABERTA)
                 .getResultList();
 
         em.close();

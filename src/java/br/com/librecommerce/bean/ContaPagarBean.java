@@ -5,7 +5,9 @@
  */
 package br.com.librecommerce.bean;
 
+import br.com.librecommerce.dao.CaixaDao;
 import br.com.librecommerce.dao.ContaPagarDao;
+import br.com.librecommerce.modelo.Caixa;
 import br.com.librecommerce.modelo.ContaPagar;
 import br.com.librecommerce.modelo.StatusConta;
 import br.com.librecommerce.util.FacesUtil;
@@ -47,15 +49,18 @@ public class ContaPagarBean {
         }
     }
     
-    public void consultarTodas() {
+    public String consultarTodas() {
         try {
             contasPagar = new ContaPagarDao().consultarTodas();
+            return "ContaPagar";
         }
         catch (NoResultException ne) {
             FacesUtil.showErrorMessage("Nenhuma conta encontrada!", null);
+            return "ContaPagar";
         }
         catch (Exception e) {
             FacesUtil.showErrorMessage(e.getMessage(), null);
+            return "ContaPagar";
         }
     }
     
@@ -70,6 +75,24 @@ public class ContaPagarBean {
             FacesUtil.showErrorMessage(e.getMessage(), null);
         }
     }
+    
+    public String pagarConta(ContaPagar contaPagar) {
+        try {
+            contaPagar.setStatusConta(StatusConta.FECHADA);
+            new ContaPagarDao().pagarConta(contaPagar);
+            
+            CaixaDao caixaDao = new CaixaDao();
+            Caixa caixa = caixaDao.getCaixaAberto();
+            caixa.setContasPagas(caixa.getContasPagas() + contaPagar.getValor());
+            caixaDao.atualizarCaixa(caixa);
+            
+            return consultarTodas();
+        } 
+        catch (Exception e) {
+            FacesUtil.showErrorMessage(e.getMessage(), null);
+            return consultarTodas();
+        }
+    } 
     
     public ContaPagar getContaPagar() {
         return contaPagar;
