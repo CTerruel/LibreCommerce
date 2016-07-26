@@ -6,6 +6,7 @@
 package br.com.librecommerce.modelo;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
@@ -31,13 +32,38 @@ public class Fornecedor extends Pessoa implements Serializable, EntidadeBase {
         this.cnpj = cnpj;
     }
 
-    @Column(length = 15)
+    @Column(length = 15, name = "INSC_ESTADUAL")
     public String getInscEstadual() {
         return inscEstadual;
     }
 
     public void setInscEstadual(String inscEstadual) {
         this.inscEstadual = inscEstadual;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 23 * hash + Objects.hashCode(this.cnpj);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Fornecedor other = (Fornecedor) obj;
+        if (!Objects.equals(this.cnpj, other.cnpj)) {
+            return false;
+        }
+        return true;
     }
     
 }

@@ -30,7 +30,7 @@ public class Cliente extends Pessoa implements Serializable {
     private String cpfCnpj;
     private Date dataNascimento;
     
-    @Column(length = 25, nullable = false)
+    @Column(length = 25, nullable = false, name = "CPF_CNPJ")
     public String getCpfCnpj() {
         return cpfCnpj;
     }
@@ -39,6 +39,7 @@ public class Cliente extends Pessoa implements Serializable {
         this.cpfCnpj = cpfCnpj;
     }
 
+    @Column(name = "DATA_NASCIMENTO")
     @Temporal(TemporalType.DATE)
     public Date getDataNascimento() {
         return dataNascimento;

@@ -12,6 +12,8 @@
     <class>br.com.librecommerce.modelo.Produto</class>
     <class>br.com.librecommerce.modelo.Venda</class>
     <class>br.com.librecommerce.modelo.Fornecedor</class>
+    <class>br.com.librecommerce.modelo.ContaPagar</class>
+    <class>br.com.librecommerce.modelo.ContaReceber</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/librecommerce?zeroDateTimeBehavior=convertToNull"/>

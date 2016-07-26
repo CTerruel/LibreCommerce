@@ -43,7 +43,7 @@ public class ItemVenda implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "idProduto", referencedColumnName = "id")
+    @JoinColumn(name = "PRODUTO_ID", referencedColumnName = "ID")
     public Produto getProduto() {
         return produto;
     }
@@ -52,6 +52,7 @@ public class ItemVenda implements Serializable {
         this.produto = produto;
     }
 
+    @Column(name = "QUANTIDADE_PRODUTO")
     public int getQuantidadeProduto() {
         return quantidadeProduto;
     }
@@ -60,7 +61,7 @@ public class ItemVenda implements Serializable {
         this.quantidadeProduto = quantidadeProduto;
     }
 
-    @Column(scale = 2)
+    @Column(scale = 2, name = "VALOR_TOTAL")
     public Double getValorTotal() {
         return valorTotal;
     }
@@ -70,7 +71,7 @@ public class ItemVenda implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "idVenda", referencedColumnName = "id")
+    @JoinColumn(name = "VENDA_ID", referencedColumnName = "ID")
     public Venda getVenda() {
         return venda;
     }
@@ -79,6 +80,7 @@ public class ItemVenda implements Serializable {
         this.venda = venda;
     }
 
+    @Column(name = "NUMERO_ITEM")
     public int getNumeroItem() {
         return numeroItem;
     }

@@ -54,6 +54,7 @@ public class Produto implements Serializable, EntidadeBase {
         this.nome = nome;
     }
 
+    @Column(name = "CODIGO_BARRA")
     public int getCodigoBarra() {
         return codigoBarra;
     }
@@ -62,7 +63,7 @@ public class Produto implements Serializable, EntidadeBase {
         this.codigoBarra = codigoBarra;
     }
 
-    @Column(precision = 5, scale = 2, nullable = false)
+    @Column(precision = 5, scale = 2, nullable = false, name = "VALOR_UNITARIO")
     public Double getValorUnitario() {
         return valorUnitario;
     }

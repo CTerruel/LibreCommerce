@@ -119,17 +119,13 @@ public class NovaVendaBean {
         return "NovaVenda";
     }
 
-    private void gerarContaReceber(Venda venda) {
-        try {
-            ContaReceber contaReceber = new ContaReceber();
-            contaReceber.setVenda(venda);
-            // Calcular data de vencimento pex: mes seguinte
-            contaReceber.setDataVencimento(gerarDataVencimento(new Date()));
-            contaReceber.setStatusConta(StatusConta.ABERTA);
-            new ContaReceberDao().gerarContaReceber(contaReceber);
-        } catch (Exception e) {
-            FacesUtil.showErrorMessage(e.getMessage(), null);
-        }
+    private void gerarContaReceber(Venda venda) throws Exception {
+        ContaReceber contaReceber = new ContaReceber();
+        contaReceber.setVenda(venda);
+        // Calcular data de vencimento pex: mes seguinte
+        contaReceber.setDataVencimento(gerarDataVencimento(new Date()));
+        contaReceber.setStatusConta(StatusConta.ABERTA);
+        new ContaReceberDao().gerarContaReceber(contaReceber);
     }
 
     private Date gerarDataVencimento(Date date) {
@@ -140,39 +136,34 @@ public class NovaVendaBean {
         return c.getTime();
     }
 
-    private void atualizarCaixa(FormaPagamento formaPagamento, Double totalVenda) {
+    private void atualizarCaixa(FormaPagamento formaPagamento, Double totalVenda) throws Exception {
         Caixa caixa = getCaixaAberto();
         if (caixa != null) {
             switch (formaPagamento) {
                 case DINHEIRO:
                     caixa.setTotalDinheiro(caixa.getTotalDinheiro() + totalVenda);
+                    caixa.setTotalVendas(caixa.getTotalVendas() + totalVenda);
                     break;
                 case CARTAO_DEBITO:
                     caixa.setTotalCartaoDebito(caixa.getTotalCartaoDebito() + totalVenda);
+                    caixa.setTotalVendas(caixa.getTotalVendas() + totalVenda);
                     break;
                 case CARTAO_CREDITO:
                     caixa.setTotalCartaoCredito(caixa.getTotalCartaoCredito() + totalVenda);
+                    caixa.setTotalVendas(caixa.getTotalVendas() + totalVenda);
                     break;
                 case PRAZO_30_DIAS:
                     caixa.setTotalPrazo30Dias(caixa.getTotalPrazo30Dias() + totalVenda);
                     break;
             }
-            caixa.setTotalVendas(caixa.getTotalVendas() + totalVenda);
-            try {
-                new CaixaDao().atualizarCaixa(caixa);
-            } catch (Exception ex) {
-                FacesUtil.showErrorMessage(ex.getMessage(), null);
-            }
+
+            new CaixaDao().atualizarCaixa(caixa);
+
         }
     }
 
-    private Caixa getCaixaAberto() {
-        try {
-            return new CaixaDao().getCaixaAberto();
-        } catch (Exception ex) {
-            FacesUtil.showErrorMessage(ex.getMessage(), null);
-            return null;
-        }
+    private Caixa getCaixaAberto() throws Exception {
+        return new CaixaDao().getCaixaAberto();
     }
 
     public String cancelarVendaPasso1() {

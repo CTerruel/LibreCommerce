@@ -52,6 +52,7 @@ public class ContaPagar implements Serializable {
         this.descricao = descricao;
     }
 
+    @Column(name = "DATA_VENCIMENTO")
     @Temporal(TemporalType.DATE)
     public Date getDataVencimento() {
         return dataVencimento;
@@ -70,6 +71,7 @@ public class ContaPagar implements Serializable {
         this.valor = valor;
     }
 
+    @Column(name = "STATUS_CONTA")
     @Enumerated(EnumType.STRING)
     public StatusConta getStatusConta() {
         return statusConta;
@@ -77,6 +79,31 @@ public class ContaPagar implements Serializable {
 
     public void setStatusConta(StatusConta statusConta) {
         this.statusConta = statusConta;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 97 * hash + this.id;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ContaPagar other = (ContaPagar) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
     }
     
 }

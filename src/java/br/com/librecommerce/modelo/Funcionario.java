@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -48,6 +49,7 @@ public class Funcionario extends Pessoa implements Serializable {
         this.Senha = Senha;
     }
 
+    @Column(name = "DATA_NASCIMENTO")
     @Temporal(TemporalType.DATE)
     public Date getDataNascimento() {
         return dataNascimento;
@@ -57,7 +59,7 @@ public class Funcionario extends Pessoa implements Serializable {
         this.dataNascimento = dataNascimento;
     }
 
-    @Column(name = "administrador")
+    @Column(name = "ADMINISTRADOR")
     public boolean isAdmin() {
         return admin;
     }
@@ -66,7 +68,7 @@ public class Funcionario extends Pessoa implements Serializable {
         this.admin = admin;
     }
 
-    @OneToMany(mappedBy = "funcionario")
+    @OneToMany(mappedBy = "funcionario", fetch = FetchType.LAZY)
     public List<Caixa> getCaixas() {
         return caixas;
     }

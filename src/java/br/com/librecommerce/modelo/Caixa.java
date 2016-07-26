@@ -14,6 +14,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,6 +35,9 @@ public class Caixa implements Serializable {
     private static final long serialVersionUID = 1L;
     
     private int id;
+    private Double contasRecebidas;
+    private Double contasPagas;
+    private Double sangria;
     private Date dataAbertura;
     private Date dataFechamento;
     private Double valorAbertura;
@@ -59,6 +63,33 @@ public class Caixa implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Column(name = "CONTAS_RECEBIDAS", scale = 2)
+    public Double getContasRecebidas() {
+        return contasRecebidas;
+    }
+
+    public void setContasRecebidas(Double contasRecebidas) {
+        this.contasRecebidas = contasRecebidas;
+    }
+
+    @Column(name = "CONTAS_PAGAS", scale = 2)
+    public Double getContasPagas() {
+        return contasPagas;
+    }
+
+    public void setContasPagas(Double contasPagas) {
+        this.contasPagas = contasPagas;
+    }
+
+    @Column(scale = 2)
+    public Double getSangria() {
+        return sangria;
+    }
+
+    public void setSangria(Double sangria) {
+        this.sangria = sangria;
     }
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -159,7 +190,7 @@ public class Caixa implements Serializable {
         this.statusCaixa = statusCaixa;
     }
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "caixa")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "caixa", fetch = FetchType.LAZY)
     public List<Venda> getVendas() {
         return vendas;
     }
@@ -169,7 +200,7 @@ public class Caixa implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "idFuncionario", referencedColumnName = "id")
+    @JoinColumn(name = "FUNCIONARIO_ID", referencedColumnName = "ID")
     public Funcionario getFuncionario() {
         return funcionario;
     }

@@ -5,7 +5,9 @@
  */
 package br.com.librecommerce.bean;
 
+import br.com.librecommerce.dao.CaixaDao;
 import br.com.librecommerce.dao.ContaReceberDao;
+import br.com.librecommerce.modelo.Caixa;
 import br.com.librecommerce.modelo.ContaReceber;
 import br.com.librecommerce.modelo.StatusConta;
 import br.com.librecommerce.util.FacesUtil;
@@ -76,6 +78,9 @@ public class ContaReceberBean {
         try {
             contaReceber.setStatusConta(StatusConta.FECHADA);
             new ContaReceberDao().receber(contaReceber);
+            Caixa caixa = getCaixaAberto();
+            caixa.setContasRecebidas(caixa.getContasRecebidas() + contaReceber.getVenda().getTotalVenda());
+            new CaixaDao().atualizarCaixa(caixa);
             FacesUtil.showInfoMessage("Conta Recebida!", null);
             return consultarTodas();
         } 
@@ -88,6 +93,9 @@ public class ContaReceberBean {
     public String receberTodas() {
         try {
             new ContaReceberDao().receberTodas(contasReceber);
+            Caixa caixa = getCaixaAberto();
+            caixa.setContasRecebidas(caixa.getContasRecebidas() + totalReceber);
+            new CaixaDao().abrirCaixa(caixa);
             FacesUtil.showInfoMessage("Contas Recebidas!", null);
             return consultarTodas();
         } 
@@ -99,6 +107,15 @@ public class ContaReceberBean {
 
     public String getNomeCliente() {
         return nomeCliente;
+    }
+    
+    private Caixa getCaixaAberto() {
+        try {
+            return new CaixaDao().getCaixaAberto();
+        } catch (Exception ex) {
+            FacesUtil.showErrorMessage(ex.getMessage(), null);
+            return null;
+        }
     }
 
     public void setNomeCliente(String nomeCliente) {

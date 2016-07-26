@@ -60,6 +60,7 @@ public class Venda implements Serializable {
         this.id = id;
     }
 
+    @Column(name = "DATA_VENDA")
     @Temporal(TemporalType.TIMESTAMP)
     public Date getDataVenda() {
         return dataVenda;
@@ -69,7 +70,7 @@ public class Venda implements Serializable {
         this.dataVenda = dataVenda;
     }
 
-    @Column(scale = 2)
+    @Column(scale = 2, name = "TOTAL_VENDA")
     public Double getTotalVenda() {
         return totalVenda;
     }
@@ -78,6 +79,7 @@ public class Venda implements Serializable {
         this.totalVenda = totalVenda;
     }
 
+    @Column(name = "FORMA_PAGAMENTO")
     @Enumerated(EnumType.STRING)
     public FormaPagamento getFormaPagamento() {
         return formaPagamento;
@@ -87,7 +89,7 @@ public class Venda implements Serializable {
         this.formaPagamento = formaPagamento;
     }
 
-    @Column(scale = 2)
+    @Column(scale = 2, name = "VALOR_PAGO")
     public Double getValorPago() {
         return valorPago;
     }
@@ -133,7 +135,7 @@ public class Venda implements Serializable {
     }
 
     @ManyToOne
-    @JoinColumn(name = "idCaixa", referencedColumnName = "id")
+    @JoinColumn(name = "CAIXA_ID", referencedColumnName = "ID")
     public Caixa getCaixa() {
         return caixa;
     }

@@ -28,6 +28,10 @@
                                        var="formaPagamento" itemLabel="#{formaPagamento.label}"
                                        itemValue="#{formaPagamento}" />
                     </p:selectOneMenu>
+                    <h:outputLabel value="Acréscimos R$: " />
+                    <p:inputText />
+                    <h:outputLabel value="Descontos R$: " />
+                    <p:inputText />
                     <h:outputLabel value="Valor Recebido R$: " />
                     <p:inputText value="#{novaVendaBean.venda.valorPago}" >
                         <p:ajax event="keyup" listener="#{novaVendaBean.atualizaTroco()}"
@@ -46,12 +50,6 @@
                     </h:panelGroup>
                 </p:panelGrid>
             </p:panel>
-            <p:ajaxStatus onstart="PF('statusDialog').show();"
-                          onsuccess="PF('statusDialog').hide();"/>
-            <p:dialog widgetVar="statusDialog" modal="true" resizable="false"
-                      showHeader="false" closable="false" draggable="false">
-                <p:graphicImage library="images" name="carregando.gif" />
-            </p:dialog>
         </h:form>
         <h:form id="frmPesquisa">
             <p:dialog header="Pesquisar Cliente" widgetVar="modalPesquisarCliente"

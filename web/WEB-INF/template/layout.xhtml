@@ -22,7 +22,8 @@
                 <p:submenu label="Financeiro">
                     <p:menuitem value="Contas a Receber" disabled="#{!autenticacaoBean.funcionario.admin}"
                                 outcome="/app/financeiro/ContaReceber"/>
-                    <p:menuitem value="Contas a Pagar" disabled="#{!autenticacaoBean.funcionario.admin}" />
+                    <p:menuitem value="Contas a Pagar" disabled="#{!autenticacaoBean.funcionario.admin}"
+                                outcome="/app/financeiro/ContaPagar"/>
                 </p:submenu>
                 <p:submenu label="Cadastros">
                     <p:menuitem value="Fornecedores" outcome="/app/cadastros/CadastroFornecedor"
